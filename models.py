@@ -16,7 +16,6 @@ class Resnet50Flower102(nn.Module):
             nn.ReLU(),
             nn.Dropout(0.3),
             nn.Linear(512, 102),
-            nn.LogSoftmax(dim=1),
         )
 
     def forward(self, x):
