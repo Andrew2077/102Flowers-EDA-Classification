@@ -25,7 +25,7 @@ from tqdm import tqdm
 warnings.filterwarnings("ignore")
 
 
-configs = load_configs()
+configs = load_configs(r"config.json")
 
 dataset_url = configs["urls"]["data_url"]
 labels = configs["urls"]["labels_url"]
@@ -60,14 +60,14 @@ if __name__ == "__main__":
     transformsations = transforms.Compose(
         [
             transforms.Resize((224, 224)),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
     )
 
     train_split, test_split, val_split = prepare_df(split_path, labels_Path, data_root)
 
-    train_dataset = FlowerDataset(train_split, transform=transformsations)
+    train_dataset = FlowerDataset(train_split[:100], transform=transformsations)
     train_loader = DataLoader(
         train_dataset, batch_size=TRAIN_BATCH_SIZE, shuffle=SCHUFFLE_TRAIN
     )
@@ -79,8 +79,8 @@ if __name__ == "__main__":
 
     model = Resnet50Flower102(
         pretrained=PRETRAINED_WEIGHTS,
-        freeze=FREEZE_RESNET,
-    )
+        freeze_Resnet=FREEZE_RESNET,
+    ).to(DEVICE)
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
@@ -107,11 +107,12 @@ if __name__ == "__main__":
             epoch_train_acc += train_acc
 
         for image_batch, label_batch in tqdm(
-            val_loader, total=len(val_loader), desc=f"Epoch {epoch}", leave=True
+            val_loader, total=len(val_loader), desc=f"Epoch {epoch + 1}", leave=True
         ):
             val_loss, val_acc = training(
                 model,
                 loss_fn,
+                accuray_fn,
                 optimizer,
                 image_batch,
                 label_batch,
@@ -121,22 +122,30 @@ if __name__ == "__main__":
             epoch_val_loss += val_loss
             epoch_val_acc += val_acc
 
+        if len(history["val_loss"]) != 0:
+            if (epoch_val_loss / len(val_loader)) < min(history["val_loss"]):
+                torch.save(
+                    model.state_dict(),
+                    configs["dir"]["model_path"] + f"model_{epoch+1}.pth",
+                )
+                print(
+                    f"Validation loss decreased from {min(history['val_loss'])} to {epoch_val_loss / len(val_loader)}, saving model"
+                )
+
         # * Printing the results
         history["train_loss"].append(epoch_train_loss / len(train_loader))
         history["train_acc"].append(epoch_train_acc / len(train_loader))
         history["val_loss"].append(epoch_val_loss / len(val_loader))
         history["val_acc"].append(epoch_val_acc / len(val_loader))
-        print("-----------------------**********************************----------------------")
         print(
-            f"Epoch {epoch+1} Train loss: {history['train_loss'][-1]} Train acc: {history['train_acc'][-1]}"
+            "-----------------------**********************************----------------------"
         )
         print(
-            f"Epoch {epoch+1} Val loss: {history['val_loss'][-1]} Val acc: {history['val_acc'][-1]}"
+            f"Epoch {epoch+1} Train loss: {history['train_loss'][-1]:.6f} | Train acc: {(history['train_acc'][-1]*100):.4f}%"
         )
-
-
-    #     # writer.add_scalar("Loss/train", total_loss / len(train_loader), epoch)
-    #     # writer.add_scalar("Accuracy/train", total_acc / len(train_loader), epoch)
-
-    #     print(f"Epoch {epoch} Loss : {total_loss / len(train_loader)}")
-    #     print(f"Epoch {epoch} Accuracy: {total_acc/len(train_loader)}")
+        print(
+            f"Epoch {epoch+1} Val loss: {history['val_loss'][-1]:.6f} | Val acc: {(history['val_acc'][-1]*100):.4f}%"
+        )
+        print(
+            "-----------------------**********************************----------------------"
+        )

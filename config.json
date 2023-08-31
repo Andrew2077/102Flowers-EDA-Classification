@@ -10,12 +10,13 @@
     "data_path": "data/102flowers/jpg",
     "labels_path": "data/imagelabels.mat",
     "split_path": "data/setid.mat",
-    "tzg_path": "102flowers.tgz"
+    "tzg_path": "102flowers.tgz",
+    "model_path": "models/"
   },
   "config": {
     "overwrite_data": false,
     "pretrained_weights": true,
-    "freeze_Resnet": true,
+    "freeze_resnet": true,
     "seed": 0,
     "device": "cuda",
     "train_batch_size": 16,

@@ -8,8 +8,8 @@ def training(
     device,
     step_type="train",
 ):
+    data_batch, target_batch = data_batch.to(device), (target_batch-1).to(device)
     optimizer.zero_grad()
-    data_batch, target_batch = data_batch.to(device), target_batch.to(device)
 
     if step_type == "train":
         model.train()
