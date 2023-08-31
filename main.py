@@ -20,7 +20,8 @@ from PIL import Image
 from scipy.io import loadmat
 from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
-from tqdm import tqdm
+# from tqdm import tqdm
+from tqdm import tqdm_notebook as tqdm
 
 warnings.filterwarnings("ignore")
 
