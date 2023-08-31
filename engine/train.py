@@ -1,6 +1,7 @@
 def training(
     model,
     loss_fn,
+    accuray_fn,
     optimizer,
     data_batch,
     target_batch,

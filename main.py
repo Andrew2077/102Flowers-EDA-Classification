@@ -60,9 +60,11 @@ if __name__ == "__main__":
     transformsations = transforms.Compose(
         [
             transforms.Resize((224, 224)),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             transforms.ToTensor(),
         ]
     )
+
     train_split, test_split, val_split = prepare_df(split_path, labels_Path, data_root)
 
     train_dataset = FlowerDataset(train_split, transform=transformsations)
@@ -84,6 +86,8 @@ if __name__ == "__main__":
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     for epoch in range(NUM_EPOCHS):
+        history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
+
         epoch_train_loss, epoch_train_acc = 0, 0
         epoch_val_loss, epoch_val_acc = 0, 0
         for image_batch, label_batch in tqdm(
@@ -92,6 +96,7 @@ if __name__ == "__main__":
             train_loss, train_acc = training(
                 model,
                 loss_fn,
+                accuray_fn,
                 optimizer,
                 image_batch,
                 label_batch,
@@ -117,16 +122,18 @@ if __name__ == "__main__":
             epoch_val_acc += val_acc
 
         # * Printing the results
+        history["train_loss"].append(epoch_train_loss / len(train_loader))
+        history["train_acc"].append(epoch_train_acc / len(train_loader))
+        history["val_loss"].append(epoch_val_loss / len(val_loader))
+        history["val_acc"].append(epoch_val_acc / len(val_loader))
+        print("-----------------------**********************************----------------------")
+        print(
+            f"Epoch {epoch+1} Train loss: {history['train_loss'][-1]} Train acc: {history['train_acc'][-1]}"
+        )
+        print(
+            f"Epoch {epoch+1} Val loss: {history['val_loss'][-1]} Val acc: {history['val_acc'][-1]}"
+        )
 
-    #         x, y = x.to(device), (y - 1).to(device)
-
-    #         optimizer.zero_grad()
-    #         y_hat = model(x)
-    #         loss = loss_fn(y_hat, y)
-    #         loss.backward()
-    #         optimizer.step()
-    #         total_loss += loss.item()
-    #         total_acc += accuray_fn(y_hat, y)
 
     #     # writer.add_scalar("Loss/train", total_loss / len(train_loader), epoch)
     #     # writer.add_scalar("Accuracy/train", total_acc / len(train_loader), epoch)
