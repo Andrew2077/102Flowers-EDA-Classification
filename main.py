@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     train_split, test_split, val_split = prepare_df(split_path, labels_Path, data_root)
 
-    train_dataset = FlowerDataset(train_split[:100], transform=transformsations)
+    train_dataset = FlowerDataset(train_split, transform=transformsations)
     train_loader = DataLoader(
         train_dataset, batch_size=TRAIN_BATCH_SIZE, shuffle=SCHUFFLE_TRAIN
     )
