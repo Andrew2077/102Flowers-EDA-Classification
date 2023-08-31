@@ -25,7 +25,6 @@ def prepare_df(split_path: str, labels_Path: str, data_root: str) -> pd.DataFram
         data.index = data.index + 1
         data.reset_index(inplace=True)
         data.rename(columns={"index": "img_id"}, inplace=True)
-        data['labels'] = data['labels'].apply(lambda x: x-1)
         return data
 
     def add_image_path(root: str, x: int) -> str:
