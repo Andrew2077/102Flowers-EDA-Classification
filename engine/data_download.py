@@ -1,6 +1,5 @@
 import requests, os, tarfile
 from tqdm import tqdm
-from main import labels
 
 
 def download(
