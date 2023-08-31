@@ -1,23 +1,30 @@
-import torchvision
-import torchsummary
-import torch.nn as nn
 import segmentation_models_pytorch as smp
+import torch.nn as nn
+import torchsummary
+import torchvision
 
 
 class Resnet50Flower102(nn.Module):
-    def __init__(self, pretrained=True):
+    def __init__(self, pretrained=True, freeze_Resnet=True):
         super().__init__()
 
         self.model = torchvision.models.resnet50(pretrained=pretrained)
+        if freeze_Resnet:
+            for param in self.model.parameters():
+                param.requires_grad = False
+
         self.model.fc = nn.Sequential(
             nn.Linear(2048, 1024),
             nn.ReLU(),
-            # nn.Dropout(0.3),
+            nn.Dropout(0.3),
             nn.Linear(1024, 512),
             nn.ReLU(),
-            # nn.Dropout(0.3),
+            nn.Dropout(0.3),
             nn.Linear(512, 102),
         )
+
+    def forward(self, x):
+        return self.model(x)
 
     def forward(self, x):
         return self.model(x)

@@ -1,12 +1,14 @@
-import torch
-import tarfile
 import os
-from torchvision import transforms, datasets
-from torch.utils.data import DataLoader, Dataset
-from PIL import Image
-from scipy.io import loadmat
+import tarfile
+
 import numpy as np
 import pandas as pd
+import torch
+from PIL import Image
+from scipy.io import loadmat
+from torch.utils.data import DataLoader, Dataset
+from torchvision import datasets, transforms
+
 
 def prepare_df(split_path: str, labels_Path: str, data_root: str) -> pd.DataFrame:
     def prepare_splits(indices: np.ndarray, value: int) -> pd.DataFrame:
@@ -25,6 +27,7 @@ def prepare_df(split_path: str, labels_Path: str, data_root: str) -> pd.DataFram
         data.index = data.index + 1
         data.reset_index(inplace=True)
         data.rename(columns={"index": "img_id"}, inplace=True)
+        
         return data
 
     def add_image_path(root: str, x: int) -> str:
@@ -69,3 +72,4 @@ class FlowerDataset(Dataset):
         classification = self.data_split.iloc[index]["labels"]
         classification = torch.tensor(classification, dtype=torch.long)
         return img, classification
+

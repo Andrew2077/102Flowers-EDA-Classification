@@ -1,7 +1,6 @@
 import requests, os, tarfile
 from tqdm import tqdm
-
-dataset_url = r"https://www.robots.ox.ac.uk/~vgg/data/flowers/102/102flowers.tgz"
+from main import labels
 
 
 def download(
@@ -16,7 +15,7 @@ def download(
         force_redownload (bool, optional): whether to force redownload if file already exists. Defaults to False.
     """
     if os.path.exists(os.path.join("data", filename)) and not force_redownload:
-        print("File already exists")
+        print(f"File {filename} already exists")
     else:
         print(f"Downloading {filename}...")
         request = requests.get(url, stream=True)
@@ -49,4 +48,12 @@ def extract_tgz(file_name):
         ):
             file.extract(sample, f"data/{file_name.split('.')[0]}")
         file.close()
+        
+        
+def download_extrac_all(dataset_url, labels, splits, tzg_path, OVERWRITE=False):
+    download(dataset_url, dataset_url.split("/")[-1], force_redownload=OVERWRITE)
+    download(labels, labels.split("/")[-1], force_redownload=OVERWRITE)
+    download(splits, splits.split("/")[-1], force_redownload=OVERWRITE)
+    extract_tgz(tzg_path)
+
 

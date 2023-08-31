@@ -3,3 +3,5 @@
 old
 data
 runs
+.vscode
+__pycache__
