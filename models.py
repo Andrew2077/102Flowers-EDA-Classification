@@ -8,7 +8,7 @@ class Resnet50Flower102(nn.Module):
     def __init__(self, pretrained=True):
         super().__init__()
 
-        self.model = torchvision.models.resnet50(weights=pretrained)
+        self.model = torchvision.models.resnet50(pretrained=pretrained)
         self.model.fc = nn.Sequential(
             nn.Linear(2048, 1024),
             nn.ReLU(),
