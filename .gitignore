@@ -1,4 +1,5 @@
+*.ipynb
+
 old
 data
 runs
-flowers.ipynb
