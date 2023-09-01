@@ -1,5 +1,8 @@
 import torch
 from tqdm import tqdm
+from torch.utils.tensorboard import SummaryWriter
+
+writer = SummaryWriter()
 
 
 def training_step(
@@ -45,7 +48,7 @@ def training_loop(
     tqdm_cols=None,
 ):
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
-    
+
     for epoch in range(num_epochs):
         epoch_train_loss, epoch_train_acc = 0, 0
         epoch_val_loss, epoch_val_acc = 0, 0
@@ -125,6 +128,32 @@ def training_loop(
         history["train_acc"].append(epoch_train_acc / len(train_loader))
         history["val_loss"].append(epoch_val_loss / len(val_loader))
         history["val_acc"].append(epoch_val_acc / len(val_loader))
+
+        #******************** tensorboard********************#
+        #* Tensorboard scalars
+        writer.add_scalars(
+            main_tag="Loss",
+            tag_scalar_dict={
+                "train_loss": history["train_loss"][-1],
+                "val_loss": history["val_loss"][-1],
+            },
+            global_step=epoch,
+        )
+        writer.add_scalars(
+            main_tag="Accuracy",
+            tag_scalar_dict={
+                "train_acc": history["train_acc"][-1],
+                "val_acc": history["val_acc"][-1],
+            },
+            global_step=epoch,
+        )
+        # * Tensorboard graph
+        writer.add_graph(
+            model=model,
+            input_to_model=torch.rand(16, 3, 224, 224).to(device),
+        )
+
+        #******************** Results Printing ********************#
         print(
             "-----------------------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^----------------------"
         )
@@ -137,5 +166,5 @@ def training_loop(
         print(
             "-----------------------________________________________----------------------"
         )
-        
+
     return history
