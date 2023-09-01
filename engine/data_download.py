@@ -45,16 +45,20 @@ def extract_tgz(file_name):
         samples = file.getmembers()
         print(f"Extracting {file_name}...")
         for sample in tqdm(
-            samples, desc=file_name, unit="files", total=len(samples), unit_scale=False
+            samples,
+            desc=file_name,
+            unit="files",
+            total=len(samples),
+            unit_scale=False,
+            colour="green",
+            ncols=100,
         ):
             file.extract(sample, f"data/{file_name.split('.')[0]}")
         file.close()
-        
-        
+
+
 def download_extrac_all(dataset_url, labels, splits, tzg_path, OVERWRITE=False):
     download(dataset_url, dataset_url.split("/")[-1], force_redownload=OVERWRITE)
     download(labels, labels.split("/")[-1], force_redownload=OVERWRITE)
     download(splits, splits.split("/")[-1], force_redownload=OVERWRITE)
     extract_tgz(tzg_path)
-
-

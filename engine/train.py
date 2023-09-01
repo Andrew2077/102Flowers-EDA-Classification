@@ -45,6 +45,7 @@ def training_loop(
     tqdm_cols=None,
 ):
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
+    
     for epoch in range(num_epochs):
         epoch_train_loss, epoch_train_acc = 0, 0
         epoch_val_loss, epoch_val_acc = 0, 0
@@ -137,4 +138,5 @@ def training_loop(
         print(
             "-----------------------________________________________----------------------"
         )
-        return history
+        
+    return history
