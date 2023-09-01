@@ -136,6 +136,7 @@ if __name__ == "__main__":
     # * save model history
     if os.path.exists("results") == False:
         os.mkdir("results")
+
     if args.result_name == None:
         pd.DataFrame(model_history).to_csv(f"results/{expriment_name}.csv")
     else:

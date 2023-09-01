@@ -126,9 +126,9 @@ def training_loop(
                 )
 
         # * Printing the results
-        history["train_loss"].append(epoch_train_loss / len(train_loader))
+        history["train_loss"].append(epoch_train_loss.cpu() / len(train_loader))
         history["train_acc"].append(epoch_train_acc / len(train_loader))
-        history["val_loss"].append(epoch_val_loss / len(val_loader))
+        history["val_loss"].append(epoch_val_loss.cpu() / len(val_loader))
         history["val_acc"].append(epoch_val_acc / len(val_loader))
 
         # ******************** tensorboard********************#
@@ -154,6 +154,7 @@ def training_loop(
             model=model,
             input_to_model=torch.rand(64, 3, 224, 224).to(device),
         )
+       
 
         # ******************** Results Printing ********************#
         print(
@@ -168,5 +169,6 @@ def training_loop(
         print(
             "---------------------------------------------------------------------------------------------------------------------"
         )
-
+        
+    writer.close()
     return history
