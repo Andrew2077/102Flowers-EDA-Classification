@@ -22,6 +22,7 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 from torch.utils.tensorboard import SummaryWriter
 
+writer = SummaryWriter()
 configs = load_configs(r"config.json")
 env = configs["config"]["env"]
 if env == "notebook":
