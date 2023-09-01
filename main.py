@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import tarfile
@@ -16,15 +17,17 @@ from engine.data_processing import FlowerDataset, prepare_df
 from engine.models import Resnet50Flower102
 from engine.train import training_loop, training_step
 from engine.utils import accuray_fn, load_configs, set_global_seed
+from engine.experiment import create_writer, set_experiment_params
 from PIL import Image
 from scipy.io import loadmat
 from torch.utils.data import DataLoader, Dataset
-from torchvision import transforms
 from torch.utils.tensorboard import SummaryWriter
+from torchvision import transforms
+
 
 writer = SummaryWriter()
-configs = load_configs(r"config.json")
-env = configs["config"]["env"]
+global_configs = load_configs(r"config/global-configs.json")
+env = global_configs["config"]["env"]
 if env == "notebook":
     # from tqdm import tqdm_notebook as tqdm
     from tqdm.notebook import tnrange as tqdm
@@ -37,40 +40,54 @@ elif env == "local":
 else:
     raise ValueError("env must be either notebook or local")
 
-# warnings.filterwarnings("ignore")
+
+dataset_url = global_configs["urls"]["data_url"]
+labels = global_configs["urls"]["labels_url"]
+splits = global_configs["urls"]["split_url"]
+
+data_root = global_configs["dir"]["data_path"]
+labels_Path = global_configs["dir"]["labels_path"]
+split_path = global_configs["dir"]["split_path"]
+tzg_path = global_configs["dir"]["tzg_path"]
+model_path = global_configs["dir"]["model_path"]
 
 
-dataset_url = configs["urls"]["data_url"]
-labels = configs["urls"]["labels_url"]
-splits = configs["urls"]["split_url"]
-
-data_root = configs["dir"]["data_path"]
-labels_Path = configs["dir"]["labels_path"]
-split_path = configs["dir"]["split_path"]
-
-overwirte_data = configs["config"]["overwrite_data"]
-tzg_path = configs["dir"]["tzg_path"]
+overwirte_data = global_configs["config"]["overwrite_data"]
 
 download_extrac_all(dataset_url, labels, splits, tzg_path, OVERWRITE=overwirte_data)
 
 
 if __name__ == "__main__":
-    # * Gloabl hyperparameters
-    SEED = configs["config"]["seed"]
-    DEVICE = configs["config"]["device"]
-    PRETRAINED_WEIGHTS = configs["config"]["pretrained_weights"]
-    FREEZE_RESNET = configs["config"]["freeze_resnet"]
-    models_path = configs["dir"]["model_path"]
+    parser = argparse.ArgumentParser(description="Experiment Configs")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default=r"config/experiment1.json",
+        help="path to the experiment config file",
+    )
+    args = parser.parse_args()
+
+    (
+        expriment_name,
+        model_name,
+        extra,
+        PRETRAINED_WEIGHTS,
+        FREEZE_RESNET,
+        SEED,
+        DEVICE,
+        TRAIN_BATCH_SIZE,
+        VALIDATION_BATCH_SIZE,
+        NUM_EPOCHS,
+        LEARNING_RATE,
+        SCHUFFLE_TRAIN,
+        SCHUFFLE_VALIDATION,
+        SCHUFFLE_TEST,
+    ) = set_experiment_params(args.config)
+
+
     set_global_seed(SEED)
-
-    # * Training hyperparameters
-    LEARNING_RATE = configs["config"]["learning_rate"]
-    NUM_EPOCHS = configs["config"]["epochs"]
-    TRAIN_BATCH_SIZE = configs["config"]["train_batch_size"]
-    VALIDATION_BATCH_SIZE = configs["config"]["val_batch_size"]
-    SCHUFFLE_TRAIN = configs["config"]["schuffle_train"]
-    SCHUFFLE_VALIDATION = configs["config"]["schuffle_val"]
-
+    
+    writer = create_writer(expriment_name, model_name, extra)
     transformsations = transforms.Compose(
         [
             transforms.Resize((224, 224)),
@@ -108,6 +125,8 @@ if __name__ == "__main__":
         val_loader,
         DEVICE,
         NUM_EPOCHS,
-        models_path,
+        model_name,
+        model_path,
         ncols,
+        writer,
     )

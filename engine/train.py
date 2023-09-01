@@ -45,7 +45,9 @@ def training_loop(
     device,
     num_epochs,
     models_direcotry,
+    model_name,
     tqdm_cols=None,
+    writer=writer,
 ):
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
 
@@ -99,26 +101,26 @@ def training_loop(
             # * saving model dict
             torch.save(
                 model.state_dict(),
-                models_direcotry + f"best_model.pth",
+                models_direcotry + f"best_{model_name}.pth",
                 # models_direcotry + f"model_{epoch+1}.pth",
             )
             # * saving optimizer dict
-            torch.save(
-                optimizer.state_dict(),
-                models_direcotry + f"optim_state.pth",
-            )
+            # torch.save(
+            #     optimizer.state_dict(),
+            #     models_direcotry + f"optim_state.pth",
+            # )
 
         elif len(history["val_loss"]) != 0:
             if (epoch_val_loss / len(val_loader)) < min(history["val_loss"]):
                 torch.save(
                     model.state_dict(),
-                    models_direcotry + f"best_model.pth",
+                    models_direcotry + f"best_{model_name}.pth",
                     # models_direcotry + f"model_{epoch+1}.pth",
                 )
-                torch.save(
-                    optimizer.state_dict(),
-                    models_direcotry + f"optim_state.pth",
-                )
+                # torch.save(
+                #     optimizer.state_dict(),
+                #     models_direcotry + f"optim_state.pth",
+                # )
                 print(
                     f"Validation loss decreased from {min(history['val_loss'])} to {epoch_val_loss / len(val_loader)}, saving model"
                 )
@@ -129,8 +131,8 @@ def training_loop(
         history["val_loss"].append(epoch_val_loss / len(val_loader))
         history["val_acc"].append(epoch_val_acc / len(val_loader))
 
-        #******************** tensorboard********************#
-        #* Tensorboard scalars
+        # ******************** tensorboard********************#
+        # * Tensorboard scalars
         writer.add_scalars(
             main_tag="Loss",
             tag_scalar_dict={
@@ -150,12 +152,12 @@ def training_loop(
         # * Tensorboard graph
         writer.add_graph(
             model=model,
-            input_to_model=torch.rand(16, 3, 224, 224).to(device),
+            input_to_model=torch.rand(64, 3, 224, 224).to(device),
         )
 
-        #******************** Results Printing ********************#
+        # ******************** Results Printing ********************#
         print(
-            "-----------------------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^----------------------"
+            "---------------------------------------------------------------------------------------------------------------------"
         )
         print(
             f"Epoch {epoch+1} Train loss: {history['train_loss'][-1]:.6f} | Train acc: {(history['train_acc'][-1]*100):.4f}%"
@@ -164,7 +166,7 @@ def training_loop(
             f"Epoch {epoch+1} Val loss: {history['val_loss'][-1]:.6f} | Val acc: {(history['val_acc'][-1]*100):.4f}%"
         )
         print(
-            "-----------------------________________________________----------------------"
+            "---------------------------------------------------------------------------------------------------------------------"
         )
 
     return history
