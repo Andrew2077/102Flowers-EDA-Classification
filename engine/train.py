@@ -1,6 +1,7 @@
 import torch
 from tqdm import tqdm
 
+
 def training_step(
     model,
     loss_fn,
@@ -11,7 +12,7 @@ def training_step(
     device,
     step_type="train",
 ):
-    data_batch, target_batch = data_batch.to(device), (target_batch-1).to(device)
+    data_batch, target_batch = data_batch.to(device), (target_batch - 1).to(device)
     optimizer.zero_grad()
 
     if step_type == "train":
@@ -30,6 +31,7 @@ def training_step(
         optimizer.step()
     return loss.item(), accuray_fn(preds, target_batch)
 
+
 def training_loop(
     model,
     loss_fn,
@@ -40,7 +42,7 @@ def training_loop(
     device,
     num_epochs,
     models_direcotry,
-    tqdm_cols = None,
+    tqdm_cols=None,
 ):
     for epoch in range(num_epochs):
         history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
@@ -53,6 +55,7 @@ def training_loop(
             desc=f"Train Epoch : {epoch+1}",
             leave=True,
             ncols=tqdm_cols,
+            colour="green",
         ):
             train_loss, train_acc = training_step(
                 model,
@@ -73,6 +76,7 @@ def training_loop(
             desc=f"Val Epoch : {epoch + 1}",
             leave=True,
             ncols=tqdm_cols,
+            colour="blue",
         ):
             val_loss, val_acc = training_step(
                 model,
@@ -97,7 +101,6 @@ def training_loop(
                 print(
                     f"Validation loss decreased from {min(history['val_loss'])} to {epoch_val_loss / len(val_loader)}, saving model"
                 )
-        
 
         # * Printing the results
         history["train_loss"].append(epoch_train_loss / len(train_loader))
