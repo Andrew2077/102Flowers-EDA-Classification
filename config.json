@@ -23,7 +23,7 @@
     "train_batch_size": 16,
     "val_batch_size": 16,
     "num_workers": 1,
-    "epochs": 10,
+    "epochs": 30,
     "learning_rate": 0.0003,
     "schuffle_train": true,
     "schuffle_val": true,

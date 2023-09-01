@@ -45,7 +45,6 @@ def training_loop(
     tqdm_cols=None,
 ):
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
-    
     for epoch in range(num_epochs):
         epoch_train_loss, epoch_train_acc = 0, 0
         epoch_val_loss, epoch_val_acc = 0, 0
@@ -93,19 +92,19 @@ def training_loop(
 
         if len(history["val_loss"]) == 0:
             print("Saving first model...")
-            #* saving model dict
+            # * saving model dict
             torch.save(
                 model.state_dict(),
                 models_direcotry + f"best_model.pth",
                 # models_direcotry + f"model_{epoch+1}.pth",
             )
-            #* saving optimizer dict
+            # * saving optimizer dict
             torch.save(
                 optimizer.state_dict(),
                 models_direcotry + f"optim_state.pth",
             )
 
-        if len(history["val_loss"]) != 0:
+        elif len(history["val_loss"]) != 0:
             print("validation loss decreased")
             if (epoch_val_loss / len(val_loader)) < min(history["val_loss"]):
                 torch.save(
@@ -114,8 +113,8 @@ def training_loop(
                     # models_direcotry + f"model_{epoch+1}.pth",
                 )
                 torch.save(
-                optimizer.state_dict(),
-                models_direcotry + f"optim_state.pth",
+                    optimizer.state_dict(),
+                    models_direcotry + f"optim_state.pth",
                 )
                 print(
                     f"Validation loss decreased from {min(history['val_loss'])} to {epoch_val_loss / len(val_loader)}, saving model"
