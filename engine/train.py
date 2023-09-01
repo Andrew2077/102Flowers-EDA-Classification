@@ -50,7 +50,7 @@ def training_loop(
         for image_batch, label_batch in tqdm(
             train_loader,
             total=len(train_loader),
-            desc=f"Epoch {epoch+1}",
+            desc=f"Train Epoch : {epoch+1}",
             leave=True,
             ncols=tqdm_cols,
         ):
@@ -70,7 +70,7 @@ def training_loop(
         for image_batch, label_batch in tqdm(
             val_loader,
             total=len(val_loader),
-            desc=f"Epoch {epoch + 1}",
+            desc=f"Val Epoch : {epoch + 1}",
             leave=True,
             ncols=tqdm_cols,
         ):
