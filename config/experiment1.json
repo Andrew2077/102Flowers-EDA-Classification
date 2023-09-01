@@ -1,6 +1,6 @@
 {
   "writer": {
-    "experiment_name": "free-backbone",
+    "experiment_name": "Train-MLP",
     "model_name": "resnet50-freezed",
     "extra": ""
   },

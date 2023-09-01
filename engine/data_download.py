@@ -1,4 +1,7 @@
-import requests, os, tarfile
+import os
+import tarfile
+
+import requests
 from tqdm import tqdm
 
 

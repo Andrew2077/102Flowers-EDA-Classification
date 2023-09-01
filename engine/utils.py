@@ -1,6 +1,7 @@
+import json
+
 import numpy as np
 import torch
-import json
 
 
 def set_global_seed(SEED: int)->None:

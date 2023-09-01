@@ -14,16 +14,15 @@ import torchsummary
 import torchvision
 from engine.data_download import download, download_extrac_all, extract_tgz
 from engine.data_processing import FlowerDataset, prepare_df
+from engine.experiment import create_writer, set_experiment_params
 from engine.models import Resnet50Flower102
 from engine.train import training_loop, training_step
 from engine.utils import accuray_fn, load_configs, set_global_seed
-from engine.experiment import create_writer, set_experiment_params
 from PIL import Image
 from scipy.io import loadmat
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import transforms
-
 
 writer = SummaryWriter()
 global_configs = load_configs(r"config/global-configs.json")
@@ -65,6 +64,9 @@ if __name__ == "__main__":
         default=r"config/experiment1.json",
         help="path to the experiment config file",
     )
+    parser.add_argument(
+        "--result_name", type=str, default=None, help="path to the output csv file"
+    )
     args = parser.parse_args()
 
     (
@@ -84,14 +86,14 @@ if __name__ == "__main__":
         SCHUFFLE_TEST,
     ) = set_experiment_params(args.config)
 
-
     set_global_seed(SEED)
-    
+
     writer = create_writer(expriment_name, model_name, extra)
     transformsations = transforms.Compose(
         [
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
+            # * ImageNet distribution params
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
     )
@@ -130,3 +132,11 @@ if __name__ == "__main__":
         ncols,
         writer,
     )
+
+    # * save model history
+    if os.path.exists("results") == False:
+        os.mkdir("results")
+    if args.result_name == None:
+        pd.DataFrame(model_history).to_csv(f"results/{expriment_name}.csv")
+    else:
+        pd.DataFrame(model_history).to_csv(args.result_name)

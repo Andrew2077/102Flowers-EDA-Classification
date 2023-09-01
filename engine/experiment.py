@@ -1,7 +1,8 @@
-from datetime import datetime
-from torch.utils.tensorboard import SummaryWriter
-import os
 import json
+import os
+from datetime import datetime
+
+from torch.utils.tensorboard import SummaryWriter
 
 
 def create_writer(experiment_name: str, model_name: str, extra: str) -> str:
