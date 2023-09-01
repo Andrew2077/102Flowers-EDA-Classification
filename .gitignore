@@ -1,5 +1,5 @@
 *.ipynb
-
+*.pth
 old
 data
 runs

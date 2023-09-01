@@ -26,6 +26,8 @@ def download(
             unit="iB",  # * unit of measurement, bytes
             unit_scale=True,  # * scale to human readable units
             unit_divisor=chunk_size,  # * divide by chunk size
+            colour="green",
+            ncols=100,
         ) as bar:
             # * progress bar
             for data in request.iter_content(chunk_size=chunk_size):

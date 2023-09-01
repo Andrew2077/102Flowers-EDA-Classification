@@ -97,7 +97,7 @@ if __name__ == "__main__":
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
-    training_loop(
+    model_history = training_loop(
         model,
         loss_fn,
         accuray_fn,
