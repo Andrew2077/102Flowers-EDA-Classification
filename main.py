@@ -14,19 +14,28 @@ import torchvision
 from engine.data_download import download, download_extrac_all, extract_tgz
 from engine.data_processing import FlowerDataset, prepare_df
 from engine.models import Resnet50Flower102
-from engine.train import training
+from engine.train import training_loop, training_step
 from engine.utils import accuray_fn, load_configs, set_global_seed
 from PIL import Image
 from scipy.io import loadmat
 from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
-from tqdm import tqdm
-# from tqdm import tqdm_notebook as tqdm
+
+configs = load_configs(r"config.json")
+env = configs["config"]["env"]
+if env == "notebook":
+    from tqdm import tqdm_notebook as tqdm
+
+    ncols = 400
+elif env == "local":
+    from tqdm import tqdm
+
+    ncols = None
+else:
+    raise ValueError("env must be either notebook or local")
 
 warnings.filterwarnings("ignore")
 
-
-configs = load_configs(r"config.json")
 
 dataset_url = configs["urls"]["data_url"]
 labels = configs["urls"]["labels_url"]
@@ -48,6 +57,7 @@ if __name__ == "__main__":
     DEVICE = configs["config"]["device"]
     PRETRAINED_WEIGHTS = configs["config"]["pretrained_weights"]
     FREEZE_RESNET = configs["config"]["freeze_resnet"]
+    models_path = configs["dir"]["model_path"]
     set_global_seed(SEED)
 
     # * Training hyperparameters
@@ -86,67 +96,15 @@ if __name__ == "__main__":
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
-    for epoch in range(NUM_EPOCHS):
-        history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
-
-        epoch_train_loss, epoch_train_acc = 0, 0
-        epoch_val_loss, epoch_val_acc = 0, 0
-        for image_batch, label_batch in tqdm(
-            train_loader, total=len(train_loader), desc=f"Epoch {epoch}", leave=True
-        ):
-            train_loss, train_acc = training(
-                model,
-                loss_fn,
-                accuray_fn,
-                optimizer,
-                image_batch,
-                label_batch,
-                DEVICE,
-                step_type="train",
-            )
-            epoch_train_loss += train_loss
-            epoch_train_acc += train_acc
-
-        for image_batch, label_batch in tqdm(
-            val_loader, total=len(val_loader), desc=f"Epoch {epoch + 1}", leave=True
-        ):
-            val_loss, val_acc = training(
-                model,
-                loss_fn,
-                accuray_fn,
-                optimizer,
-                image_batch,
-                label_batch,
-                DEVICE,
-                step_type="val",
-            )
-            epoch_val_loss += val_loss
-            epoch_val_acc += val_acc
-
-        if len(history["val_loss"]) != 0:
-            if (epoch_val_loss / len(val_loader)) < min(history["val_loss"]):
-                torch.save(
-                    model.state_dict(),
-                    configs["dir"]["model_path"] + f"model_{epoch+1}.pth",
-                )
-                print(
-                    f"Validation loss decreased from {min(history['val_loss'])} to {epoch_val_loss / len(val_loader)}, saving model"
-                )
-
-        # * Printing the results
-        history["train_loss"].append(epoch_train_loss / len(train_loader))
-        history["train_acc"].append(epoch_train_acc / len(train_loader))
-        history["val_loss"].append(epoch_val_loss / len(val_loader))
-        history["val_acc"].append(epoch_val_acc / len(val_loader))
-        print(
-            "-----------------------**********************************----------------------"
-        )
-        print(
-            f"Epoch {epoch+1} Train loss: {history['train_loss'][-1]:.6f} | Train acc: {(history['train_acc'][-1]*100):.4f}%"
-        )
-        print(
-            f"Epoch {epoch+1} Val loss: {history['val_loss'][-1]:.6f} | Val acc: {(history['val_acc'][-1]*100):.4f}%"
-        )
-        print(
-            "-----------------------**********************************----------------------"
-        )
+    training_loop(
+        model,
+        loss_fn,
+        accuray_fn,
+        optimizer,
+        train_loader,
+        val_loader,
+        DEVICE,
+        NUM_EPOCHS,
+        models_path,
+        ncols,
+    )

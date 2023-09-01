@@ -14,6 +14,7 @@
     "model_path": "models/"
   },
   "config": {
+    "env": "local",
     "overwrite_data": false,
     "pretrained_weights": true,
     "freeze_resnet": true,
