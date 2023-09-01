@@ -35,7 +35,7 @@ elif env == "local":
 else:
     raise ValueError("env must be either notebook or local")
 
-warnings.filterwarnings("ignore")
+# warnings.filterwarnings("ignore")
 
 
 dataset_url = configs["urls"]["data_url"]

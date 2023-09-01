@@ -6,10 +6,10 @@
 - [x] Proprocessing 
 - [x] Model 
 - [x] Training
-  - [ ] better training loop information
+  - [x] better training loop information
   - [ ] Test loop
+  - [ ] Epxerimentation tracking - Tensorboard or WnB
+  - [ ] Augmentation ? 
 - [ ] better EDA
 - [ ] Visualization 
-- [ ] Epxerimentation tracking - Tensorboard or WnB
-  - [ ] Augmentation ? 
 - [ ] XAI - GradCam or Captum

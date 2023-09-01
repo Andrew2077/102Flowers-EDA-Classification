@@ -7,8 +7,13 @@ import torchvision
 class Resnet50Flower102(nn.Module):
     def __init__(self, pretrained=True, freeze_Resnet=True):
         super().__init__()
-
-        self.model = torchvision.models.resnet50(pretrained=pretrained)
+        
+        if pretrained:
+            weights = torchvision.models.ResNet50_Weights.DEFAULT
+        else: 
+            weights = None
+            
+        self.model = torchvision.models.resnet50(weights=weights)
         if freeze_Resnet:
             for param in self.model.parameters():
                 param.requires_grad = False
