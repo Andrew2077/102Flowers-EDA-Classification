@@ -91,6 +91,13 @@ def training_loop(
             epoch_val_loss += val_loss
             epoch_val_acc += val_acc
 
+        if len(history["val_loss"]) == 0:
+            print("Saving first model...")
+            torch.save(
+                model.state_dict(),
+                models_direcotry + f"model_{epoch+1}.pth",
+            )
+
         if len(history["val_loss"]) != 0:
             print("validation loss decreased")
             if (epoch_val_loss / len(val_loader)) < min(history["val_loss"]):
