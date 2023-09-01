@@ -17,7 +17,7 @@
     "env": "local",
     "overwrite_data": false,
     "pretrained_weights": true,
-    "freeze_resnet": true,
+    "freeze_resnet": false,
     "seed": 0,
     "device": "cuda",
     "train_batch_size": 16,

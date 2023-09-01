@@ -106,7 +106,6 @@ def training_loop(
             )
 
         elif len(history["val_loss"]) != 0:
-            print("validation loss decreased")
             if (epoch_val_loss / len(val_loader)) < min(history["val_loss"]):
                 torch.save(
                     model.state_dict(),
