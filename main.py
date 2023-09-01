@@ -24,9 +24,10 @@ from torchvision import transforms
 configs = load_configs(r"config.json")
 env = configs["config"]["env"]
 if env == "notebook":
-    from tqdm import tqdm_notebook as tqdm
+    # from tqdm import tqdm_notebook as tqdm
+    from tqdm.notebook import tnrange as tqdm
 
-    ncols = 400
+    ncols = 100
 elif env == "local":
     from tqdm import tqdm
 
