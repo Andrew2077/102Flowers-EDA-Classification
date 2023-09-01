@@ -1,19 +1,17 @@
 {
   "writer": {
-    "expriment-name": "test",
-    "model_name": "resnet50",
+    "expriment-name": "free-backbone",
+    "model_name": "resnet50-train-all",
     "extra": ""
   },
 
   "config": {
-    "overwrite_data": false,
     "pretrained_weights": true,
-    "freeze_resnet": false,
+    "freeze_resnet": true,
     "seed": 0,
     "device": "cuda",
     "train_batch_size": 64,
     "val_batch_size": 64,
-    "num_workers": 1,
     "epochs": 30,
     "learning_rate": 0.0003,
     "schuffle_train": true,

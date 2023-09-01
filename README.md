@@ -8,9 +8,9 @@
 - [x] Training
   - [x] better training loop information
   - [ ] Test loop
-  - [ ] Epxerimentation tracking - Tensorboard 
-    - [ ] Experiment 1 : Resnet50 - Freeze all layers except last FC layer - 30 epochs
-    - [ ] Experiment 2 : Resnet50 - Train all layers - 30 epochs
+  - [x] Epxerimentation tracking - Tensorboard 
+    - [x] Experiment 1 : Resnet50 - Freeze all layers except last FC layer - 30 epochs
+    - [x] Experiment 2 : Resnet50 - Train all layers - 30 epochs
   - [ ] Augmentation ? 
 - [ ] better EDA
 - [ ] Visualization 
