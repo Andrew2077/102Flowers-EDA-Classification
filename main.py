@@ -125,8 +125,8 @@ if __name__ == "__main__":
         val_loader,
         DEVICE,
         NUM_EPOCHS,
-        model_name,
         model_path,
+        model_name,
         ncols,
         writer,
     )
