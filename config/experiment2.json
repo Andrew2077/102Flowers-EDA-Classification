@@ -1,6 +1,6 @@
 {
   "writer": {
-    "expriment-name": "free-backbone",
+    "expriment_name": "free-backbone",
     "model_name": "resnet50-train-all",
     "extra": ""
   },
