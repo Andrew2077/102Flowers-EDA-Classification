@@ -127,9 +127,9 @@ def training_loop(
 
         # * Printing the results
         history["train_loss"].append(epoch_train_loss / len(train_loader))
-        history["train_acc"].append(epoch_train_acc / len(train_loader))
+        history["train_acc"].append(epoch_train_acc.item() / len(train_loader))
         history["val_loss"].append(epoch_val_loss / len(val_loader))
-        history["val_acc"].append(epoch_val_acc / len(val_loader))
+        history["val_acc"].append(epoch_val_acc.item() / len(val_loader))
 
         # ******************** tensorboard********************#
         # * Tensorboard scalars
