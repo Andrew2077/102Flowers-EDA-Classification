@@ -203,7 +203,7 @@ class GradCAM:
         ax[3].axis("off")
         ax[3].set_title(f"Overlayed: (True = {target_class}, Pred = {top_class})")
 
-        fig.show()
+        plt.show()
 
 
 if __name__ == "__main__":
