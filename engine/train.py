@@ -1,6 +1,8 @@
+import matplotlib.pyplot as plt
 import torch
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
+
 writer = SummaryWriter()
 
 
@@ -148,7 +150,10 @@ def training_loop(
             "---------------------------------------------------------------------------------------------------------------------"
         )
         #* ******************** GradCAM ********************#
+        
         gradcam.plot_grad_cam(test_tensor, test_target.item())
+        plt.pause(1) # * pause a bit so that plots are updated
+
         # ******************** tensorboard********************#
         # * Tensorboard scalars
         writer.add_scalars(
