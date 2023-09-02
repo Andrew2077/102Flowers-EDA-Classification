@@ -4,6 +4,9 @@ import cv2
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.subplots as sp
 import torch
 import torchvision
 from PIL import Image
@@ -185,14 +188,8 @@ class GradCAM:
             cam_heatmap,
             overplayer_img,
         ) = self.apply_grad_cam(image_tensor)
-
-        import plotly.express as px
-        import plotly.subplots as sp
-        import plotly.graph_objects as go
-
-        # Assuming you have your original_image, cam, cam_heatmap, and overplayer_img already defined
-
-        # Create subplots with 1 row and 4 columns
+        
+        # Create subplots with 1 row and 3 columns
         fig = sp.make_subplots(rows=1, cols=3, subplot_titles=("Original Image", "Grad-Cam", "Colored Grad-Cam", f"Overlayed: (True = {target_class}, Pred = {top_class})"))
 
         # Create a subplot for the original image
