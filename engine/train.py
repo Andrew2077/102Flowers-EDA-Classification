@@ -181,7 +181,8 @@ def training_loop(
         fig.update_layout(width=800, height=500)
 
         # Show the plot
-        fig.show()
+        fig.show(renderer="colab")
+
 
     writer.close()
     return history
