@@ -167,11 +167,12 @@ def training_loop(
             },
             global_step=epoch,
         )
-        # * Tensorboard graph
-        writer.add_graph(
-            model=model,
-            input_to_model=torch.rand(64, 3, 224, 224).to(device),
-        )
+        #* No graph saved to tensorboard    
+        #* ValueError: Modules that have backward hooks assigned can't be compiled: Conv2d(512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        # writer.add_graph(
+        #     model=model,
+        #     input_to_model=torch.rand(64, 3, 224, 224).to(device),
+        # )
         
         
     writer.close()
