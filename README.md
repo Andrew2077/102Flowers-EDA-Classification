@@ -10,16 +10,20 @@ FelloshipAi project
   - [X] building dataset pipeline
   - [ ] EDA
     - [ ] better EDA
+
+
 - [x] Model
 - [x] Training
-
   - [x] better training loop information
-  - [ ] Test loop
   - [x] Epxerimentation tracking - Tensorboard
-    - [x] Experiment 1 : Resnet50 - Freeze all layers except last FC layer - 30 epochs
-    - [x] Experiment 2 : Resnet50 - Train all layers - 30 epochs
+    - [x] Experiment 1 : Resnet50 - Train all layers - 30 epochs
+    - [x] Experiment 2 : Resnet50 - Freeze all layers except last FC layer - 30 epochs
 
-- [ ] XAI - GradCam or Captum
+
+- [ ] Inference module  
+  - [ ] Test loop 
+  
+- [X] XAI - GradCam from scratch
 - [ ] Visualization
 
 

@@ -40,8 +40,8 @@ env = global_configs["config"]["env"]
 if env == "notebook":
     # from tqdm import tqdm_notebook as tqdm
     from tqdm.notebook import tnrange as tqdm
-
     ncols = 100
+    
 elif env == "local":
     from tqdm import tqdm
 
