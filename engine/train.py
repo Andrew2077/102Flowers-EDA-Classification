@@ -151,9 +151,11 @@ def training_loop(
         )
         #* ******************** GradCAM ********************#
         
-        gradcam.plot_grad_cam(test_tensor, test_target.item())
-        plt.pause(1) # * pause a bit so that plots are updated
-
+        fig, ax = gradcam.plot_grad_cam(test_tensor, test_target.item())
+        # fig.savefig(f"results/gradcam_{epoch+1}.png")
+        # #* show figure
+        plt.show()
+        
         # ******************** tensorboard********************#
         # * Tensorboard scalars
         writer.add_scalars(
