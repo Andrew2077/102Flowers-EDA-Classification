@@ -128,8 +128,6 @@ def training_loop(
                 print(
                     f"Validation loss decreased from {min(history['val_loss'])} to {epoch_val_loss / len(val_loader)}, saving model"
                 )
-                
-        
 
         # ******************** Results Printing ********************#
         history["train_loss"].append(epoch_train_loss / len(train_loader))
@@ -168,21 +166,22 @@ def training_loop(
             },
             global_step=epoch,
         )
-        #* No graph saved to tensorboard    
-        #* ValueError: Modules that have backward hooks assigned can't be compiled: Conv2d(512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        # * No graph saved to tensorboard
+        # * ValueError: Modules that have backward hooks assigned can't be compiled: Conv2d(512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False)
         # writer.add_graph(
         #     model=model,
         #     input_to_model=torch.rand(64, 3, 224, 224).to(device),
         # )
-        
-        #* ******************** GradCAM ********************#
-        
-        fig, ax = gradcam.plot_grad_cam(test_tensor, test_target.item())
-        # fig.savefig(f"results/gradcam_{epoch+1}.png")
+
+        # * ******************** GradCAM ********************#
+
+        fig = gradcam.plot_grad_cam(test_tensor, test_target.item())
         # #* show figure
-        plt.title(f'gradcam-Hisroy at Epoch : {epoch+1}')
-        plt.show()
-        
-        
+        fig.update_layout(title_text=f"Grad-CAM at Epoch {epoch+1}", title_x=0.5)
+        fig.update_layout(width=800, height=500)
+
+        # Show the plot
+        fig.show(renderer="notebook")
+
     writer.close()
     return history

@@ -186,24 +186,31 @@ class GradCAM:
             overplayer_img,
         ) = self.apply_grad_cam(image_tensor)
 
-        fig, ax = plt.subplots(1, 4, figsize=(20, 5))
-        ax[0].imshow((origional_image))
-        ax[0].set_title("Original Image")
-        ax[0].axis("off")
+        import plotly.express as px
+        import plotly.subplots as sp
+        import plotly.graph_objects as go
 
-        ax[1].imshow((cam))
-        ax[1].set_title("Grad-Cam")
-        ax[1].axis("off")
+        # Assuming you have your original_image, cam, cam_heatmap, and overplayer_img already defined
 
-        ax[2].imshow(cam_heatmap)
-        ax[2].axis("off")
-        ax[2].set_title("Colored Grad-Cam")
+        # Create subplots with 1 row and 4 columns
+        fig = sp.make_subplots(rows=1, cols=3, subplot_titles=("Original Image", "Grad-Cam", "Colored Grad-Cam", f"Overlayed: (True = {target_class}, Pred = {top_class})"))
 
-        ax[3].imshow(overplayer_img)
-        ax[3].axis("off")
-        ax[3].set_title(f"Overlayed: (True = {target_class}, Pred = {top_class})")
+        # Create a subplot for the original image
+        fig.add_trace(go.Image(z=origional_image), row=1, col=1)
+        fig.update_xaxes(showticklabels=False)
+        fig.update_yaxes(showticklabels=False)
 
-        return fig, ax
+        # Create a subplot for Colored Grad-Cam
+        fig.add_trace(go.Image(z=cam_heatmap), row=1, col=2)
+        fig.update_xaxes(showticklabels=False)
+        fig.update_yaxes(showticklabels=False)
+
+        # Create a subplot for Overlayed Image
+        fig.add_trace(go.Image(z=overplayer_img), row=1, col=3)
+        fig.update_xaxes(showticklabels=False)
+        fig.update_yaxes(showticklabels=False)
+
+        return fig
 
 
 if __name__ == "__main__":
@@ -235,4 +242,11 @@ if __name__ == "__main__":
     image_tensor, target_class = image_tensor.unsqueeze(0).to(device), target_class.to(
         device
     )
-    grad_cam.plot_grad_cam(image_tensor, target_class.item())
+    fig = grad_cam.plot_grad_cam(image_tensor, target_class.item())
+
+    # Update layout settings
+    fig.update_layout(title_text=f"fig1", title_x=0.5)
+    fig.update_layout(width=1200, height=500)
+
+    # Show the plot
+    fig.show(renderer="browser")
