@@ -1,7 +1,7 @@
 {
   "writer": {
-    "experiment_name": "Train-MLP",
-    "model_name": "resnet50-freezed",
+    "experiment_name": "Train-all-model",
+    "model_name": "resnet50-train-all",
     "extra": ""
   },
 
@@ -14,7 +14,7 @@
     "val_batch_size": 64,
     "epochs": 30,
     "learning_rate": 0.0003,
-    "schuffle_train": true,
+    "SHUFFLE_TRAIN": true,
     "schuffle_val": false,
     "schuffle_test": false
   }

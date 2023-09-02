@@ -9,6 +9,15 @@ from scipy.io import loadmat
 from torch.utils.data import DataLoader, Dataset
 from torchvision import datasets, transforms
 
+transformsations = transforms.Compose(
+    [
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        # * ImageNet distribution params
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ]
+)
+
 
 def prepare_df(split_path: str, labels_Path: str, data_root: str) -> pd.DataFrame:
     def prepare_splits(indices: np.ndarray, value: int) -> pd.DataFrame:
@@ -27,7 +36,7 @@ def prepare_df(split_path: str, labels_Path: str, data_root: str) -> pd.DataFram
         data.index = data.index + 1
         data.reset_index(inplace=True)
         data.rename(columns={"index": "img_id"}, inplace=True)
-        
+
         return data
 
     def add_image_path(root: str, x: int) -> str:
@@ -56,6 +65,7 @@ def prepare_df(split_path: str, labels_Path: str, data_root: str) -> pd.DataFram
     val_split = merged[merged["set_type"] == 1]
     return train_split, test_split, val_split
 
+
 class FlowerDataset(Dataset):
     def __init__(self, data_split: pd.DataFrame, transform: transforms = None):
         super().__init__()
@@ -73,3 +83,34 @@ class FlowerDataset(Dataset):
         classification = torch.tensor(classification, dtype=torch.long)
         return img, classification
 
+
+def prepare_splits(
+    split_path,
+    labels_Path,
+    data_root,
+    transformsations,
+    train_batch_size,
+    validation_batch_size,
+    test_batch_size,
+    shuffle_train,
+    shuffle_validation,
+    shuffle_test,
+    **kwargs,
+):
+    train_split, test_split, val_split = prepare_df(split_path, labels_Path, data_root)
+    train_dataset = FlowerDataset(train_split, transform=transformsations)
+    train_loader = DataLoader(
+        train_dataset, batch_size=train_batch_size, shuffle=shuffle_train
+    )
+
+    val_dataset = FlowerDataset(val_split, transform=transformsations)
+    val_loader = DataLoader(
+        val_dataset, batch_size=validation_batch_size, shuffle=shuffle_validation
+    )
+
+    test_dataset = FlowerDataset(test_split, transform=transformsations)
+    test_loader = DataLoader(
+        val_dataset, batch_size=test_batch_size, shuffle=shuffle_test
+    )
+    
+    return train_loader, val_loader, test_loader

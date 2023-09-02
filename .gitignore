@@ -6,4 +6,6 @@ runs
 .vscode
 __pycache__
 test.py
+test_ground.py
+test
 ```

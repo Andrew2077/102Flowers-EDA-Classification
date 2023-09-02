@@ -3,7 +3,11 @@ import json
 import os
 import tarfile
 import warnings
+from typing import Optional
 
+import cv2
+import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import requests
@@ -13,16 +17,22 @@ import torch.nn as nn
 import torchsummary
 import torchvision
 from engine.data_download import download, download_extrac_all, extract_tgz
-from engine.data_processing import FlowerDataset, prepare_df
+from engine.data_processing import (
+    FlowerDataset,
+    prepare_df,
+    prepare_splits,
+    transformsations,
+)
 from engine.experiment import create_writer, set_experiment_params
 from engine.models import Resnet50Flower102
 from engine.train import training_loop, training_step
 from engine.utils import accuray_fn, load_configs, set_global_seed
+from engine.gradcam import GradCAM
 from PIL import Image
 from scipy.io import loadmat
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.tensorboard import SummaryWriter
-from torchvision import transforms
+from torchvision import models, transforms
 
 writer = SummaryWriter()
 global_configs = load_configs(r"config/global-configs.json")
@@ -81,56 +91,58 @@ if __name__ == "__main__":
         VALIDATION_BATCH_SIZE,
         NUM_EPOCHS,
         LEARNING_RATE,
-        SCHUFFLE_TRAIN,
-        SCHUFFLE_VALIDATION,
+        SHUFFLE_TRAIN,
+        SHUFFLE_VALIDATION,
         SCHUFFLE_TEST,
     ) = set_experiment_params(args.config)
 
     set_global_seed(SEED)
 
-    writer = create_writer(expriment_name, model_name, extra)
-    transformsations = transforms.Compose(
-        [
-            transforms.Resize((224, 224)),
-            transforms.ToTensor(),
-            # * ImageNet distribution params
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
+    custom_writer = create_writer(expriment_name, model_name, extra)
+
+    train_loader, val_loader, test_loader = prepare_splits(
+        split_path,
+        labels_Path,
+        data_root,
+        transformsations,
+        TRAIN_BATCH_SIZE,
+        VALIDATION_BATCH_SIZE,
+        VALIDATION_BATCH_SIZE,
+        SHUFFLE_TRAIN,
+        SHUFFLE_VALIDATION,
+        SCHUFFLE_TEST,
     )
-
-    train_split, test_split, val_split = prepare_df(split_path, labels_Path, data_root)
-
-    train_dataset = FlowerDataset(train_split, transform=transformsations)
-    train_loader = DataLoader(
-        train_dataset, batch_size=TRAIN_BATCH_SIZE, shuffle=SCHUFFLE_TRAIN
-    )
-
-    val_dataset = FlowerDataset(val_split, transform=transformsations)
-    val_loader = DataLoader(
-        val_dataset, batch_size=VALIDATION_BATCH_SIZE, shuffle=SCHUFFLE_VALIDATION
+    test_tensor, test_target = test_loader.dataset[SEED]
+    test_tensor, test_target = test_tensor.unsqueeze(0).to(DEVICE), test_target.to(
+        DEVICE
     )
 
     model = Resnet50Flower102(
+        device=DEVICE,
         pretrained=PRETRAINED_WEIGHTS,
         freeze_Resnet=FREEZE_RESNET,
-    ).to(DEVICE)
+    )
+    gradcam = GradCAM(model=model)
 
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+    CCE = nn.CrossEntropyLoss()
+    ADAM = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     model_history = training_loop(
-        model,
-        loss_fn,
-        accuray_fn,
-        optimizer,
-        train_loader,
-        val_loader,
-        DEVICE,
-        NUM_EPOCHS,
-        model_path,
-        model_name,
-        ncols,
-        writer,
+        model=gradcam.model,
+        gradcam=gradcam,
+        test_tensor=test_tensor,
+        test_target=test_target,
+        loss_fn=CCE,
+        accuray_fn=accuray_fn,
+        optimizer=ADAM,
+        train_loader=train_loader,
+        val_loader=val_loader,
+        device=DEVICE,
+        num_epochs=NUM_EPOCHS,
+        models_direcotry=model_path,
+        model_name=model_name,
+        tqdm_cols=ncols,
+        writer=custom_writer,
     )
 
     # * save model history

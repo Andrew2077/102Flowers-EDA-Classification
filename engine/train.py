@@ -1,7 +1,6 @@
 import torch
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
-
 writer = SummaryWriter()
 
 
@@ -37,6 +36,9 @@ def training_step(
 
 def training_loop(
     model,
+    gradcam,
+    test_tensor,
+    test_target,
     loss_fn,
     accuray_fn,
     optimizer,
@@ -124,13 +126,29 @@ def training_loop(
                 print(
                     f"Validation loss decreased from {min(history['val_loss'])} to {epoch_val_loss / len(val_loader)}, saving model"
                 )
+                
+        
 
-        # * Printing the results
+        # ******************** Results Printing ********************#
         history["train_loss"].append(epoch_train_loss / len(train_loader))
         history["train_acc"].append(epoch_train_acc.item() / len(train_loader))
         history["val_loss"].append(epoch_val_loss / len(val_loader))
         history["val_acc"].append(epoch_val_acc.item() / len(val_loader))
 
+        print(
+            "---------------------------------------------------------------------------------------------------------------------"
+        )
+        print(
+            f"Epoch {epoch+1} Train loss: {history['train_loss'][-1]:.6f} | Train acc: {(history['train_acc'][-1]*100):.4f}%"
+        )
+        print(
+            f"Epoch {epoch+1} Val loss: {history['val_loss'][-1]:.6f} | Val acc: {(history['val_acc'][-1]*100):.4f}%"
+        )
+        print(
+            "---------------------------------------------------------------------------------------------------------------------"
+        )
+        #* ******************** GradCAM ********************#
+        gradcam.plot_grad_cam(test_tensor, test_target.item())
         # ******************** tensorboard********************#
         # * Tensorboard scalars
         writer.add_scalars(
@@ -154,21 +172,7 @@ def training_loop(
             model=model,
             input_to_model=torch.rand(64, 3, 224, 224).to(device),
         )
-       
-
-        # ******************** Results Printing ********************#
-        print(
-            "---------------------------------------------------------------------------------------------------------------------"
-        )
-        print(
-            f"Epoch {epoch+1} Train loss: {history['train_loss'][-1]:.6f} | Train acc: {(history['train_acc'][-1]*100):.4f}%"
-        )
-        print(
-            f"Epoch {epoch+1} Val loss: {history['val_loss'][-1]:.6f} | Val acc: {(history['val_acc'][-1]*100):.4f}%"
-        )
-        print(
-            "---------------------------------------------------------------------------------------------------------------------"
-        )
+        
         
     writer.close()
     return history

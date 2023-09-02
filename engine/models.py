@@ -5,8 +5,9 @@ import torchvision
 
 
 class Resnet50Flower102(nn.Module):
-    def __init__(self, pretrained=True, freeze_Resnet=True):
+    def __init__(self, device, pretrained=True, freeze_Resnet=True):
         super().__init__()
+        self.device = device
         
         if pretrained:
             weights = torchvision.models.ResNet50_Weights.DEFAULT
@@ -27,6 +28,7 @@ class Resnet50Flower102(nn.Module):
             nn.Dropout(0.3),
             nn.Linear(512, 102),
         )
+        self.model.to(device)
 
     def forward(self, x):
         return self.model(x)

@@ -44,8 +44,8 @@ def set_experiment_params(config_path: str):
     VALIDATION_BATCH_SIZE = configs["config"]["val_batch_size"]
     NUM_EPOCHS = configs["config"]["epochs"]
     LEARNING_RATE = configs["config"]["learning_rate"]
-    SCHUFFLE_TRAIN = configs["config"]["schuffle_train"]
-    SCHUFFLE_VALIDATION = configs["config"]["schuffle_val"]
+    SHUFFLE_TRAIN = configs["config"]["SHUFFLE_TRAIN"]
+    SHUFFLE_VALIDATION = configs["config"]["schuffle_val"]
     SCHUFFLE_TEST = configs["config"]["schuffle_test"]
 
     return (
@@ -60,7 +60,7 @@ def set_experiment_params(config_path: str):
         VALIDATION_BATCH_SIZE,
         NUM_EPOCHS,
         LEARNING_RATE,
-        SCHUFFLE_TRAIN,
-        SCHUFFLE_VALIDATION,
+        SHUFFLE_TRAIN,
+        SHUFFLE_VALIDATION,
         SCHUFFLE_TEST,
     )
