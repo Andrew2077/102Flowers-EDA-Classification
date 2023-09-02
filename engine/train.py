@@ -154,6 +154,7 @@ def training_loop(
         fig, ax = gradcam.plot_grad_cam(test_tensor, test_target.item())
         # fig.savefig(f"results/gradcam_{epoch+1}.png")
         # #* show figure
+        plt.title(f'gradcam-Hisroy at Epoch : {epoch+1}')
         plt.show()
         
         # ******************** tensorboard********************#
