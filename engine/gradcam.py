@@ -207,37 +207,12 @@ class GradCAM:
         axs[2].axis('off')
         axs[2].set_title(f"Overlayed: (True = {target_class}, Pred = {top_class})")
 
-        plt.suptitle(f"Grad-CAM Epoch: {frame}", fontsize=16)
+        plt.suptitle(f"Grad-CAM Epoch: {frame+1}", fontsize=16)
 
         # Save the figure
-        plt.savefig(f"{output_path}/gradcam_plt_{frame}.png", bbox_inches='tight')
+        plt.savefig(f"{output_path}/gradcam_plt_{frame+1}.png", bbox_inches='tight')
+        print(f"Saved Grad-CAM Epoch: {frame+1}")
         plt.close()
-
-
-        # # Create subplots with 1 row and 3 columns
-        # fig = sp.make_subplots(rows=1, cols=3, subplot_titles=("Original Image", "Grad-Cam", "Colored Grad-Cam", f"Overlayed: (True = {target_class}, Pred = {top_class})"))
-
-        # # Create a subplot for the original image
-        # fig.add_trace(go.Image(z=origional_image), row=1, col=1)
-        # fig.update_xaxes(showticklabels=False)
-        # fig.update_yaxes(showticklabels=False)
-
-        # # Create a subplot for Colored Grad-Cam
-        # fig.add_trace(go.Image(z=cam_heatmap), row=1, col=2)
-        # fig.update_xaxes(showticklabels=False)
-        # fig.update_yaxes(showticklabels=False)
-
-        # # Create a subplot for Overlayed Image
-        # fig.add_trace(go.Image(z=overplayer_img), row=1, col=3)
-        # fig.update_xaxes(showticklabels=False)
-        # fig.update_yaxes(showticklabels=False)
-
-        # #* adjust Title Font and Position
-        # fig.update_layout(title_text=f"Grad-CAM Epoch : {frame}", title_x=0.5,title_font_size=20)
-        # fig.update_layout(width=1200, height=500)
-
-        # #* save figure
-        # fig.write_image(f"figs/gradcam_{frame}.png")
 
 
 
@@ -274,7 +249,7 @@ if __name__ == "__main__":
         device
     )
     for i in range(3):
-        grad_cam.save_grad_cam(image_tensor, target_class.item(), i, "figs")
+        grad_cam.save_grad_cam(image_tensor, target_class.item(), i, "figs/gradcam/frames")
         
     # animate_saved_figs(range(3), "figs", "gradcam")
 

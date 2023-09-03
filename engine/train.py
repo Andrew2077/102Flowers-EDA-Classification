@@ -174,14 +174,7 @@ def training_loop(
         # )
 
         # * ******************** GradCAM ********************#
-
-        fig = gradcam.plot_grad_cam(test_tensor, test_target.item())
-        # #* show figure
-        fig.update_layout(title_text=f"Grad-CAM at Epoch {epoch+1}", title_x=0.5)
-        fig.update_layout(width=800, height=500)
-
-        # Show the plot
-        fig.show(renderer="colab")
+        gradcam.save_grad_cam(test_tensor, test_target.item(), epoch, "figs/gradcam/frames")
 
 
     writer.close()

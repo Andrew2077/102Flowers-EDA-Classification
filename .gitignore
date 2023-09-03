@@ -7,5 +7,6 @@ runs
 __pycache__
 test.py
 test_ground.py
+engine/matplotlib_animator.py
 test
 ```
