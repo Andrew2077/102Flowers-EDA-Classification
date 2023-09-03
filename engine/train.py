@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import torch
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
+import os
 
 writer = SummaryWriter()
 
@@ -171,7 +172,9 @@ def training_loop(
         # )
 
         # * ******************** GradCAM ********************#
-        gradcam.save_grad_cam(test_tensor, test_target.item(), epoch, "figs/gradcam/frames")
+        if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
+            os.makedirs(f"figs/gradcam/frames/{model_name}")
+        gradcam.save_grad_cam(test_tensor, test_target.item(), epoch, f"figs/gradcam/frames/{model_name}")
         print(
             "---------------------------------------------------------------------------------------------------------------------"
         )
