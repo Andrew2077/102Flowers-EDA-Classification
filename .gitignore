@@ -3,7 +3,6 @@
 *.zip
 old
 data
-runs
 .vscode
 __pycache__
 test.py

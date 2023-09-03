@@ -1,19 +1,19 @@
 {
   "writer": {
-    "experiment_name": "Train-MLP",
-    "model_name": "resnet50-freezed",
+    "experiment_name": "Train-No-Weights",
+    "model_name": "resnet50-no-weights",
     "extra": ""
   },
 
   "config": {
-    "pretrained_weights": true,
-    "freeze_resnet": true,
-    "seed": 0,
+    "pretrained_weights": false,
+    "freeze_resnet": false,
+    "seed": 555,
     "device": "cuda",
     "train_batch_size": 64,
     "val_batch_size": 64,
-    "epochs": 30,
-    "learning_rate": 0.0003,
+    "epochs": 100,
+    "learning_rate": 0.01,
     "SHUFFLE_TRAIN": true,
     "schuffle_val": false,
     "schuffle_test": false
