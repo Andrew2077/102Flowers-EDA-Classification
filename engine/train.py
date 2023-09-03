@@ -55,7 +55,7 @@ def training_loop(
     writer=writer,
 ):
     print(
-    """
+        """
     **************************************************************************************************
     **************************************************************************************************
     ---------------------------------   Training Started - -------------------------------------------
@@ -68,6 +68,8 @@ def training_loop(
     Ploting the first gradcam on the model's weights before training
     """
     )
+    if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
+        os.makedirs(f"figs/gradcam/frames/{model_name}")
     gradcam.save_grad_cam(
         test_tensor, test_target.item(), 0, f"figs/gradcam/frames/{model_name}"
     )
@@ -188,8 +190,6 @@ def training_loop(
         # )
 
         # * ******************** GradCAM ********************#
-        if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
-            os.makedirs(f"figs/gradcam/frames/{model_name}")
         gradcam.save_grad_cam(
             test_tensor, test_target.item(), epoch, f"figs/gradcam/frames/{model_name}"
         )

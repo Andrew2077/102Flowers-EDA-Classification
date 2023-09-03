@@ -127,7 +127,10 @@ if __name__ == "__main__":
         pretrained=PRETRAINED_WEIGHTS,
         freeze_Resnet=FREEZE_RESNET,
     )
-    gradcam = GradCAM(model=model)
+    
+    with open("config/flower_to_name.json") as f:
+        flower_to_name = json.load(f)
+    gradcam = GradCAM(model=model, class_dict=flower_to_name)
 
     CCE = nn.CrossEntropyLoss()
     ADAM = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
