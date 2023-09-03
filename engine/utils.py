@@ -22,3 +22,12 @@ def accuray_fn(ypred, y_true):
 
 def load_configs(path):
     return json.load(open(path, "r"))
+
+
+# Custom sorting function to extract the numeric part and sort numerically
+def extract_numeric_part(file_path):
+    # Split the file path by underscores and take the last part
+    file_name = file_path.split('_')[-1]
+    # Remove the file extension and any non-numeric characters
+    numeric_part = ''.join(filter(str.isdigit, file_name))
+    return int(numeric_part)  # Convert to integer for numerical sorting

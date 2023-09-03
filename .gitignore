@@ -1,5 +1,7 @@
 *.ipynb
 *.pth
+*.png
+*.zip
 old
 data
 runs
