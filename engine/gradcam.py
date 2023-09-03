@@ -15,7 +15,8 @@ from torchvision import models, transforms
 
 
 class GradCAM:
-    def __init__(self, model):
+    def __init__(self, model, class_dict):
+        self.class_dict = class_dict
         # * set model to eval
         self.model = model
         self.model.eval()
@@ -205,7 +206,9 @@ class GradCAM:
         # Colored Grad-Cam subplot
         axs[2].imshow(overlayed_img)
         axs[2].axis("off")
-        axs[2].set_title(f"Overlayed: (True = {target_class}, Pred = {top_class})")
+        axs[2].set_title(
+            f"Overlayed: (True = {self.class_dict[str(target_class)]}, Pred = {self.class_dict[str(top_class+1)]})"
+        )
 
         plt.suptitle(f"Grad-CAM Epoch: {frame+1}", fontsize=16)
 
@@ -222,14 +225,15 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     from data_processing import FlowerDataset, prepare_df, transformations
     from matplotlib.animation import FuncAnimation
+    from models import Resnet50Flower102
     from torch.utils.data import DataLoader
     from utils import set_global_seed
-    from visualizations import animate_saved_figs
-
-    from models import Resnet50Flower102
 
     with open("config/global-configs.json") as f:
         global_configs = json.load(f)
+
+    with open("config/flower_to_name.json") as f:
+        flower_to_name = json.load(f)
 
     split_path = global_configs["dir"]["split_path"]
     labels_Path = global_configs["dir"]["labels_path"]
@@ -242,7 +246,7 @@ if __name__ == "__main__":
 
     set_global_seed(0)
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    grad_cam = GradCAM(Resnet50Flower102(device, True, False))
+    grad_cam = GradCAM(Resnet50Flower102(device, True, False), flower_to_name)
     image_tensor, target_class = test_dataset[15]
 
     image_tensor, target_class = image_tensor.unsqueeze(0).to(device), target_class.to(
@@ -250,7 +254,7 @@ if __name__ == "__main__":
     )
     for i in range(3):
         grad_cam.save_grad_cam(
-            image_tensor, target_class.item(), i, "figs/gradcam/frames"
+            image_tensor, target_class.item(), i, "figs/gradcam/test"
         )
 
     # animate_saved_figs(range(3), "figs", "gradcam")

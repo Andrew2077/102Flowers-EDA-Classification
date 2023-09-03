@@ -54,8 +54,24 @@ def training_loop(
     tqdm_cols=None,
     writer=writer,
 ):
+    print(
+    """
+    **************************************************************************************************
+    **************************************************************************************************
+    ---------------------------------   Training Started - -------------------------------------------
+    Traing model: {model_name}
+    Number of Epochs: {num_epochs}
+    Batch size: {train_loader.batch_size}
+    Device: {device}
+    **************************************************************************************************
+    **************************************************************************************************
+    Ploting the first gradcam on the model's weights before training
+    """
+    )
+    gradcam.save_grad_cam(
+        test_tensor, test_target.item(), 0, f"figs/gradcam/frames/{model_name}"
+    )
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
-
     for epoch in range(num_epochs):
         epoch_train_loss, epoch_train_acc = 0, 0
         epoch_val_loss, epoch_val_acc = 0, 0
@@ -174,7 +190,9 @@ def training_loop(
         # * ******************** GradCAM ********************#
         if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
             os.makedirs(f"figs/gradcam/frames/{model_name}")
-        gradcam.save_grad_cam(test_tensor, test_target.item(), epoch, f"figs/gradcam/frames/{model_name}")
+        gradcam.save_grad_cam(
+            test_tensor, test_target.item(), epoch, f"figs/gradcam/frames/{model_name}"
+        )
         print(
             "---------------------------------------------------------------------------------------------------------------------"
         )
