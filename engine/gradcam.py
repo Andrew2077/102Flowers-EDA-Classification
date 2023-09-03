@@ -4,6 +4,7 @@ import cv2
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.subplots as sp
@@ -179,45 +180,78 @@ class GradCAM:
             overlayed_image,
         )
 
-    def plot_grad_cam(self, image_tensor, target_class):
+    def save_grad_cam(self, image_tensor, target_class, frame, output_path):
         (
             top_class,
             top_prop,
-            origional_image,
+            original_image,
             cam,
             cam_heatmap,
-            overplayer_img,
+            overlayed_img,
         ) = self.apply_grad_cam(image_tensor)
         
-        # Create subplots with 1 row and 3 columns
-        fig = sp.make_subplots(rows=1, cols=3, subplot_titles=("Original Image", "Grad-Cam", "Colored Grad-Cam", f"Overlayed: (True = {target_class}, Pred = {top_class})"))
+        fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 
-        # Create a subplot for the original image
-        fig.add_trace(go.Image(z=origional_image), row=1, col=1)
-        fig.update_xaxes(showticklabels=False)
-        fig.update_yaxes(showticklabels=False)
+        # Original Image subplot
+        axs[0].imshow(original_image)
+        axs[0].axis('off')
+        axs[0].set_title("Original Image")
 
-        # Create a subplot for Colored Grad-Cam
-        fig.add_trace(go.Image(z=cam_heatmap), row=1, col=2)
-        fig.update_xaxes(showticklabels=False)
-        fig.update_yaxes(showticklabels=False)
+        # Grad-Cam subplot
+        axs[1].imshow(cam_heatmap, cmap='hot')
+        axs[1].axis('off')
+        axs[1].set_title("Grad-Cam")
 
-        # Create a subplot for Overlayed Image
-        fig.add_trace(go.Image(z=overplayer_img), row=1, col=3)
-        fig.update_xaxes(showticklabels=False)
-        fig.update_yaxes(showticklabels=False)
+        # Colored Grad-Cam subplot
+        axs[2].imshow(overlayed_img)
+        axs[2].axis('off')
+        axs[2].set_title(f"Overlayed: (True = {target_class}, Pred = {top_class})")
 
-        return fig
+        plt.suptitle(f"Grad-CAM Epoch: {frame}", fontsize=16)
+
+        # Save the figure
+        plt.savefig(f"{output_path}/gradcam_plt_{frame}.png", bbox_inches='tight')
+        plt.close()
+
+
+        # # Create subplots with 1 row and 3 columns
+        # fig = sp.make_subplots(rows=1, cols=3, subplot_titles=("Original Image", "Grad-Cam", "Colored Grad-Cam", f"Overlayed: (True = {target_class}, Pred = {top_class})"))
+
+        # # Create a subplot for the original image
+        # fig.add_trace(go.Image(z=origional_image), row=1, col=1)
+        # fig.update_xaxes(showticklabels=False)
+        # fig.update_yaxes(showticklabels=False)
+
+        # # Create a subplot for Colored Grad-Cam
+        # fig.add_trace(go.Image(z=cam_heatmap), row=1, col=2)
+        # fig.update_xaxes(showticklabels=False)
+        # fig.update_yaxes(showticklabels=False)
+
+        # # Create a subplot for Overlayed Image
+        # fig.add_trace(go.Image(z=overplayer_img), row=1, col=3)
+        # fig.update_xaxes(showticklabels=False)
+        # fig.update_yaxes(showticklabels=False)
+
+        # #* adjust Title Font and Position
+        # fig.update_layout(title_text=f"Grad-CAM Epoch : {frame}", title_x=0.5,title_font_size=20)
+        # fig.update_layout(width=1200, height=500)
+
+        # #* save figure
+        # fig.write_image(f"figs/gradcam_{frame}.png")
+
 
 
 if __name__ == "__main__":
     matplotlib.use("TkAgg")
     import json
 
+    import matplotlib.pyplot as plt
     from data_processing import FlowerDataset, prepare_df, transformsations
+    from matplotlib.animation import FuncAnimation
     from models import Resnet50Flower102
     from torch.utils.data import DataLoader
     from utils import set_global_seed
+    from visualizations import animate_saved_figs
 
     with open("config/global-configs.json") as f:
         global_configs = json.load(f)
@@ -230,8 +264,8 @@ if __name__ == "__main__":
 
     test_dataset = FlowerDataset(test_split, transform=transformsations)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
+    
     set_global_seed(0)
-
     device = "cuda" if torch.cuda.is_available() else "cpu"
     grad_cam = GradCAM(Resnet50Flower102(device, True, False))
     image_tensor, target_class = test_dataset[15]
@@ -239,11 +273,8 @@ if __name__ == "__main__":
     image_tensor, target_class = image_tensor.unsqueeze(0).to(device), target_class.to(
         device
     )
-    fig = grad_cam.plot_grad_cam(image_tensor, target_class.item())
+    for i in range(3):
+        grad_cam.save_grad_cam(image_tensor, target_class.item(), i, "figs")
+        
+    # animate_saved_figs(range(3), "figs", "gradcam")
 
-    # Update layout settings
-    fig.update_layout(title_text=f"fig1", title_x=0.5)
-    fig.update_layout(width=1200, height=500)
-
-    # Show the plot
-    fig.show(renderer="browser")

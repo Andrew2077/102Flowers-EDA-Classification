@@ -9,7 +9,10 @@ FelloshipAi project
   - [X] downloading dataset
   - [X] building dataset pipeline
   - [ ] EDA
-    - [ ] better EDA
+    - [ ] bar plot for class distribution
+      - [ ] slider for classes
+    - [ ] show images for each class
+      - [ ] slider for classes
 
 
 - [x] Model
@@ -17,7 +20,9 @@ FelloshipAi project
   - [x] better training loop information
   - [x] Epxerimentation tracking - Tensorboard
     - [x] Experiment 1 : Resnet50 - Train all layers - 30 epochs
-    - [x] Experiment 2 : Resnet50 - Freeze all layers except last FC layer - 30 epochs
+
+    <!-- * <change it> -->
+    - [x] Experiment 2 : Resnet50 - Train MLP only - 30 epochs 
 
 
 - [ ] Inference module  
@@ -25,9 +30,18 @@ FelloshipAi project
   
 - [X] XAI - GradCam from scratch
 - [ ] Visualization
+  - [ ] metrics
+    - [ ] accuracy
+    - [ ] loss
+  - [ ] confusion matrix
+    - [ ] 102 x 102 heatmap
+      - [ ] slider 1 - 30 frames
+  - [ ] gradcam
+    - [ ] slider 1 - 30 frames
 
 
 ### Advancements
 
-- [ ] Augmentation ?
+- [ ] Augmentation 
+- [ ] changing learning rate
 - [ ] TPU - Training
