@@ -189,31 +189,30 @@ class GradCAM:
             cam_heatmap,
             overlayed_img,
         ) = self.apply_grad_cam(image_tensor)
-        
+
         fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 
         # Original Image subplot
         axs[0].imshow(original_image)
-        axs[0].axis('off')
+        axs[0].axis("off")
         axs[0].set_title("Original Image")
 
         # Grad-Cam subplot
-        axs[1].imshow(cam_heatmap, cmap='hot')
-        axs[1].axis('off')
+        axs[1].imshow(cam_heatmap, cmap="hot")
+        axs[1].axis("off")
         axs[1].set_title("Grad-Cam")
 
-        # Colored Grad-Cam subplot  
+        # Colored Grad-Cam subplot
         axs[2].imshow(overlayed_img)
-        axs[2].axis('off')
+        axs[2].axis("off")
         axs[2].set_title(f"Overlayed: (True = {target_class}, Pred = {top_class})")
 
         plt.suptitle(f"Grad-CAM Epoch: {frame+1}", fontsize=16)
 
         # Save the figure
-        plt.savefig(f"{output_path}/gradcam_plt_{frame+1}.png", bbox_inches='tight')
+        plt.savefig(f"{output_path}/gradcam_plt_{frame+1}.png", bbox_inches="tight")
         print(f"Saved Grad-CAM Epoch: {frame+1}")
         plt.close()
-
 
 
 if __name__ == "__main__":
@@ -221,12 +220,13 @@ if __name__ == "__main__":
     import json
 
     import matplotlib.pyplot as plt
-    from data_processing import FlowerDataset, prepare_df, transformsations
+    from data_processing import FlowerDataset, prepare_df, transformations
     from matplotlib.animation import FuncAnimation
-    from models import Resnet50Flower102
     from torch.utils.data import DataLoader
     from utils import set_global_seed
     from visualizations import animate_saved_figs
+
+    from models import Resnet50Flower102
 
     with open("config/global-configs.json") as f:
         global_configs = json.load(f)
@@ -237,9 +237,9 @@ if __name__ == "__main__":
 
     _, test_split, _ = prepare_df(split_path, labels_Path, data_root)
 
-    test_dataset = FlowerDataset(test_split, transform=transformsations)
+    test_dataset = FlowerDataset(test_split, transform=transformations)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-    
+
     set_global_seed(0)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     grad_cam = GradCAM(Resnet50Flower102(device, True, False))
@@ -249,7 +249,8 @@ if __name__ == "__main__":
         device
     )
     for i in range(3):
-        grad_cam.save_grad_cam(image_tensor, target_class.item(), i, "figs/gradcam/frames")
-        
-    # animate_saved_figs(range(3), "figs", "gradcam")
+        grad_cam.save_grad_cam(
+            image_tensor, target_class.item(), i, "figs/gradcam/frames"
+        )
 
+    # animate_saved_figs(range(3), "figs", "gradcam")

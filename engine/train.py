@@ -144,9 +144,6 @@ def training_loop(
         print(
             f"Epoch {epoch+1} Val loss: {history['val_loss'][-1]:.6f} | Val acc: {(history['val_acc'][-1]*100):.4f}%"
         )
-        print(
-            "---------------------------------------------------------------------------------------------------------------------"
-        )
 
         # ******************** tensorboard********************#
         # * Tensorboard scalars
@@ -175,7 +172,9 @@ def training_loop(
 
         # * ******************** GradCAM ********************#
         gradcam.save_grad_cam(test_tensor, test_target.item(), epoch, "figs/gradcam/frames")
-
+        print(
+            "---------------------------------------------------------------------------------------------------------------------"
+        )
 
     writer.close()
     return history

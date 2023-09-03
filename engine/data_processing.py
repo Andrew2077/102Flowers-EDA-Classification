@@ -9,7 +9,7 @@ from scipy.io import loadmat
 from torch.utils.data import DataLoader, Dataset
 from torchvision import datasets, transforms
 
-transformsations = transforms.Compose(
+transformations = transforms.Compose(
     [
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
@@ -88,7 +88,7 @@ def prepare_splits(
     split_path,
     labels_Path,
     data_root,
-    transformsations,
+    transformations,
     train_batch_size,
     validation_batch_size,
     test_batch_size,
@@ -98,19 +98,19 @@ def prepare_splits(
     **kwargs,
 ):
     train_split, test_split, val_split = prepare_df(split_path, labels_Path, data_root)
-    train_dataset = FlowerDataset(train_split, transform=transformsations)
+    train_dataset = FlowerDataset(train_split, transform=transformations)
     train_loader = DataLoader(
         train_dataset, batch_size=train_batch_size, shuffle=shuffle_train
     )
 
-    val_dataset = FlowerDataset(val_split, transform=transformsations)
+    val_dataset = FlowerDataset(val_split, transform=transformations)
     val_loader = DataLoader(
         val_dataset, batch_size=validation_batch_size, shuffle=shuffle_validation
     )
 
-    test_dataset = FlowerDataset(test_split, transform=transformsations)
+    test_dataset = FlowerDataset(test_split, transform=transformations)
     test_loader = DataLoader(
         val_dataset, batch_size=test_batch_size, shuffle=shuffle_test
     )
-    
+
     return train_loader, val_loader, test_loader

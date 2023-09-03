@@ -19,19 +19,24 @@ import torch
 import torch.nn as nn
 import torchsummary
 import torchvision
-from engine.data_download import download, download_extrac_all, extract_tgz
-from engine.data_processing import (FlowerDataset, prepare_df, prepare_splits,
-                                    transformsations)
-from engine.experiment import create_writer, set_experiment_params
-from engine.gradcam import GradCAM
-from engine.models import Resnet50Flower102
-from engine.train import training_loop, training_step
-from engine.utils import accuray_fn, load_configs, set_global_seed
 from PIL import Image
 from scipy.io import loadmat
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import models, transforms
+
+from engine.data_download import download, download_extrac_all, extract_tgz
+from engine.data_processing import (
+    FlowerDataset,
+    prepare_df,
+    prepare_splits,
+    transformations,
+)
+from engine.experiment import create_writer, set_experiment_params
+from engine.gradcam import GradCAM
+from engine.models import Resnet50Flower102
+from engine.train import training_loop, training_step
+from engine.utils import accuray_fn, load_configs, set_global_seed
 
 writer = SummaryWriter()
 global_configs = load_configs(r"config/global-configs.json")
@@ -39,8 +44,9 @@ env = global_configs["config"]["env"]
 if env == "notebook":
     # from tqdm import tqdm_notebook as tqdm
     from tqdm.notebook import tnrange as tqdm
+
     ncols = 100
-    
+
 elif env == "local":
     from tqdm import tqdm
 
@@ -103,7 +109,7 @@ if __name__ == "__main__":
         split_path,
         labels_Path,
         data_root,
-        transformsations,
+        transformations,
         TRAIN_BATCH_SIZE,
         VALIDATION_BATCH_SIZE,
         VALIDATION_BATCH_SIZE,

@@ -27,6 +27,7 @@ FelloshipAi project
 
 - [ ] Inference module  
   - [ ] Test loop 
+  - [ ] grad-cam 
   
 - [X] XAI - GradCam from scratch
 - [ ] Visualization
@@ -35,9 +36,9 @@ FelloshipAi project
     - [ ] loss
   - [ ] confusion matrix
     - [ ] 102 x 102 heatmap
-      - [ ] slider 1 - 30 frames
-  - [ ] gradcam
-    - [ ] slider 1 - 30 frames
+      - [ ] animated - 30 frames
+  - [X] gradcam
+    - [X] sanimated - 30 frames
 
 
 ### Advancements
