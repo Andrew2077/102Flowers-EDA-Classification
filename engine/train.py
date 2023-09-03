@@ -69,7 +69,7 @@ def training_loop(
     """
     )
     if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
-        os.makedirs(f"figs/gradcam/frames/{model_name}")
+        os.mkdir(f"figs/gradcam/frames/{model_name}")
     gradcam.save_grad_cam(
         test_tensor, test_target.item(), 0, f"figs/gradcam/frames/{model_name}"
     )
