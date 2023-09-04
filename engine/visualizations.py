@@ -224,7 +224,7 @@ def plot_sample(df, start_idx, end_idx, classes, classes_count, font_color="blac
 
     # * fig title
     fig.suptitle(
-        f"Sample & distribution of classes from: {start_idx} to {end_idx}",
+        f"Sample & distribution of classes from: {start_idx} to {end_idx - 1}",
         fontsize=16,
         y=1,
         color=font_color,
