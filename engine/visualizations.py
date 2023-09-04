@@ -126,7 +126,7 @@ def grad_cam_plot(
     fig.suptitle(title, fontsize=20, y=1.1)
     
     
-def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'black'):
+def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'black', font_size = 10, save =False):
 
     #* generate all the feature maps
     feat_cams = [
@@ -141,7 +141,7 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'b
     #* original image axis
     ax_img.axis("off")
     ax_img.imshow(origional_img)
-    ax_img.set_title(f"Original Image - {true_label}", fontsize=14, color=font_color)
+    ax_img.set_title(f"Original Image - {true_label}", fontsize=font_size, color=font_color)
 
     #* cam heatmap axis
     ax_cam.axis("off")
@@ -154,12 +154,12 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'b
     def update(frame):
         #* update the cam heatmap
         cam_map.set_data(feat_cams[frame])
-        cam_map.axes.set_title(f"CAM for label: {frame+1}", fontsize=14, color=font_color)
+        cam_map.axes.set_title(f"CAM for label: {frame+1}", fontsize=font_size, color=font_color)
         
         #* generate the overlayed image
         _, _, overlayed_image = gradcam.adjust_cam_images(image_tensor, feat_cams[frame])
         overlayed.set_data(overlayed_image)
-        overlayed.axes.set_title(f"Overlayed image : {frame+1}", fontsize=14, color=font_color)
+        overlayed.axes.set_title(f"Overlayed image : {frame+1}", fontsize=font_size, color=font_color)
 
     anim = FuncAnimation(
         fig,
@@ -171,6 +171,8 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'b
     )
 
     display(HTML(anim.to_jshtml(default_mode="loop")))
+    if save:
+        anim.save(f"figs/gradcam/frames/all_feat_cam.gif", writer="pillow", fps=5)
 
 
 def plot_sample(df, start_idx, end_idx, classes, classes_count, font_color="black", save=True):
