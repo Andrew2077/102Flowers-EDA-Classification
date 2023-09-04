@@ -136,7 +136,7 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'b
     origional_img, _, overlayed_image = gradcam.adjust_cam_images(image_tensor, feat_cams[0])
 
     #* build the figure
-    fig, (ax_img, ax_cam, ax_overlay) = plt.subplots(1, 3, figsize=(6, 3))
+    fig, (ax_img, ax_cam, ax_overlay) = plt.subplots(1, 3, figsize=(5, 3))
 
     #* original image axis
     ax_img.axis("off")
@@ -169,7 +169,9 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'b
         blit=False,
         interval=1000 / 5,
     )
-
+    #* black background
+    fig.patch.set_facecolor("black")
+    
     display(HTML(anim.to_jshtml(default_mode="loop")))
     if save:
         anim.save(f"figs/gradcam/frames/all_feat_cam.gif", writer="pillow", fps=5)
