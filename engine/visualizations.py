@@ -70,7 +70,7 @@ def grad_cam_plot(
     matplotlib.rcParams["font.family"] = "serif"
     plt.style.use("seaborn-v0_8")
     # * create the figure
-    fig = plt.figure(figsize=(6, 6))
+    fig = plt.figure(figsize=(8, 3))
     gs = fig.add_gridspec(2, 3, width_ratios=[0.5, 0.5, 0.7])
 
     # * image plot
