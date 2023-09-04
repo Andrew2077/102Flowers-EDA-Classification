@@ -191,8 +191,7 @@ def animate_plot(
     # fig.update_yaxes(showspikes=True, spikecolor="orange", spikethickness=2)
     # fig.update_layout(hovermode="closest")
 
-    else:
-        fig.show()
+    fig.show()
 
 
 themes = [
