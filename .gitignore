@@ -6,6 +6,7 @@ data
 .vscode
 __pycache__
 test.py
+main.py
 test_ground.py
 engine/matplotlib_animator.py
 test

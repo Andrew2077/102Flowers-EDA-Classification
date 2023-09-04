@@ -4,7 +4,7 @@ import torchvision
 
 
 class Resnet50Flower102(nn.Module):
-    def __init__(self, device, pretrained=True, freeze_Resnet=True):
+    def __init__(self, device, pretrained=True, freeze_backbone=True):
         super().__init__()
         self.device = device
         
@@ -14,17 +14,17 @@ class Resnet50Flower102(nn.Module):
             weights = None
             
         self.model = torchvision.models.resnet50(weights=weights)
-        if freeze_Resnet:
+        if freeze_backbone:
             for param in self.model.parameters():
                 param.requires_grad = False
 
         self.model.fc = nn.Sequential(
             nn.Linear(2048, 1024),
-            nn.BatchNorm1d(1024),
+            # nn.BatchNorm1d(1024),
             nn.ReLU(),
             nn.Dropout(0.5),
             nn.Linear(1024, 512),
-            nn.BatchNorm1d(512),
+            # nn.BatchNorm1d(512),
             nn.ReLU(),
             nn.Dropout(0.5),
             nn.Linear(512, 102),

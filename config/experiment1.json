@@ -1,18 +1,18 @@
 {
   "writer": {
-    "experiment_name": "Train-all-model",
-    "model_name": "resnet50-train-all",
+    "experiment_name": "Train_Resnet",
+    "model_name": "colab_model",
     "extra": ""
   },
 
   "config": {
     "pretrained_weights": true,
     "freeze_resnet": true,
-    "seed": 0,
+    "seed": 42,
     "device": "cuda",
     "train_batch_size": 64,
     "val_batch_size": 64,
-    "epochs": 30,
+    "epochs": 50,
     "learning_rate": 0.01,
     "SHUFFLE_TRAIN": true,
     "schuffle_val": false,

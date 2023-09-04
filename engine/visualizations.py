@@ -12,6 +12,7 @@ from PIL import Image
 
 matplotlib.rcParams["font.family"] = "serif"
 
+#* Creates GIF from a directory of images
 def create_and_display_animation(
     image_dir,
     output_gif,
@@ -50,7 +51,7 @@ def create_and_display_animation(
     # Display animation in Jupyter Notebook using to_jshtml
     display(HTML(animation.to_jshtml(default_mode="loop")))
 
-
+#* prepare random image for plot
 def prepare_img_plot(df, label):
     path = df[df["labels"] == label]["image_path"].sample(1).values[0]
     # path = df[df["labels"] == label]["image_path"].values[0]
@@ -158,8 +159,6 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label):
         overlayed.set_data(overlayed_image)
         overlayed.axes.set_title(f"Overlayed image : {frame+1}", fontsize=14, color="white")
 
-
-
     anim = FuncAnimation(
         fig,
         update,
@@ -172,7 +171,7 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label):
     display(HTML(anim.to_jshtml(default_mode="loop")))
 
 
-def plot_sample(df, start_idx, end_idx, classes, classes_count, font_color="black"):
+def plot_sample(df, start_idx, end_idx, classes, classes_count, font_color="black", save=True):
 
     classes_count = df["labels"].value_counts()
     images = [prepare_img_plot(df, label) for label in range(start_idx, end_idx)]
@@ -228,16 +227,19 @@ def plot_sample(df, start_idx, end_idx, classes, classes_count, font_color="blac
     # * white fig background
     fig.patch.set_facecolor("white")
     # * save the figure
-    fig.savefig(
-        f"figs/samples/sample_{start_idx}_{end_idx}.png", dpi=150, bbox_inches="tight"
-    )
+    if save:
+        fig.savefig(
+            f"figs/samples/sample_{start_idx}_{end_idx}.png", dpi=150, bbox_inches="tight"
+        )
 
-    print(
-        "saved the figure with name: ",
-        f"figs/samples/frames/sample_{start_idx}_{end_idx}.png",
-    )
+        print(
+            "saved the figure with name: ",
+            f"figs/samples/frames/sample_{start_idx}_{end_idx}.png",
+        )
     
-    
+    else:
+        plt.show()
+        
 
 
 

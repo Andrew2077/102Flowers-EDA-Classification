@@ -1,6 +1,6 @@
 {
   "writer": {
-    "experiment_name": "Train-No-Weights",
+    "experiment_name": "Test-Local",
     "model_name": "resnet50-no-weights",
     "extra": ""
   },
@@ -10,9 +10,9 @@
     "freeze_resnet": false,
     "seed": 555,
     "device": "cuda",
-    "train_batch_size": 64,
-    "val_batch_size": 64,
-    "epochs": 100,
+    "train_batch_size": 4,
+    "val_batch_size": 4,
+    "epochs": 10,
     "learning_rate": 0.01,
     "SHUFFLE_TRAIN": true,
     "schuffle_val": false,

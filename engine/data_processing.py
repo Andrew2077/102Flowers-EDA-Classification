@@ -24,7 +24,7 @@ augmented_transforms = transforms.Compose(
         transforms.RandomRotation(15),
         transforms.RandomHorizontalFlip(),
         transforms.RandomVerticalFlip(),
-        transforms.center_crop(224),
+        transforms.CenterCrop(224),
         transforms.ToTensor(),
         # * ImageNet distribution params
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
@@ -103,6 +103,7 @@ def prepare_splits(
     labels_Path,
     data_root,
     transformations,
+    aug_transformations,
     train_batch_size,
     validation_batch_size,
     test_batch_size,
@@ -112,7 +113,7 @@ def prepare_splits(
     **kwargs,
 ):
     train_split, test_split, val_split = prepare_df(split_path, labels_Path, data_root)
-    train_dataset = FlowerDataset(train_split, transform=transformations)
+    train_dataset = FlowerDataset(train_split, transform=aug_transformations)
     train_loader = DataLoader(
         train_dataset, batch_size=train_batch_size, shuffle=shuffle_train
     )
