@@ -19,19 +19,19 @@ FelloshipAi project
 - [x] Training
   - [x] better training loop information
   - [x] Epxerimentation tracking - Tensorboard
-    - [x] Experiment 1 : Resnet50 - Train all layers - 30 epochs
+    - [x] Experiment 1 : Resnet50 - 99 Epochs 
 
     <!-- * <change it> -->
-    - [x] Experiment 2 : something else ?
+    - [x] Experiment 2 : Testing - Local
 
 
-- [ ] Inference module  
+- [X] Inference module  
   - [X] Test loop 
   - [X] grad-cam 
-  - [ ] adjust inference script
+  - [X] adjust inference script
   
 - [X] XAI - GradCam from scratch
-- [ ] Visualization
+- [X] Visualization
   - [X] metrics
     - [X] accuracy
     - [X] loss
