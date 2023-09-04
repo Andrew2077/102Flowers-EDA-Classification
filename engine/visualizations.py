@@ -178,7 +178,7 @@ def plot_sample(df, start_idx, end_idx, classes, classes_count, font_color="blac
     labels = [classes[str(label)] for label in range(start_idx, end_idx)]
     bar_data = [classes_count[label] for label in range(start_idx, end_idx)]
 
-    fig = plt.figure(figsize=(12, 5))
+    fig = plt.figure(figsize=(8, 5))
     gs = fig.add_gridspec(2, 3, width_ratios=[0.5, 0.5, 1])
     # * add more width to the last column
 
