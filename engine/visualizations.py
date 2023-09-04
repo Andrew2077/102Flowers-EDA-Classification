@@ -230,7 +230,7 @@ def plot_sample(df, start_idx, end_idx, classes, classes_count, font_color="blac
         color=font_color,
     )
     
-    fig.tight_layout(pad=1, h_pad=1, w_pad=1)
+    fig.tight_layout(pad=1, h_pad=3, w_pad=1)
     # * white fig background
     fig.patch.set_facecolor("white")
     # * save the figure
