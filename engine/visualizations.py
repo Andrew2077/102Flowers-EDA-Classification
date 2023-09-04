@@ -65,12 +65,12 @@ def prepare_img_plot(df, label):
     return img
 
 def grad_cam_plot(
-    class_dict, true_label, top_4_classes, top_4_probs, origional_img, heatmap, colored_heatmap, overlayed, title
+    class_dict, true_label, top_4_classes, top_4_probs, origional_img, heatmap, colored_heatmap, overlayed, title, fig_size = (10, 5)
 ):
     matplotlib.rcParams["font.family"] = "serif"
     plt.style.use("seaborn-v0_8")
     # * create the figure
-    fig = plt.figure(figsize=(8, 3))
+    fig = plt.figure(figsize=fig_size)
     gs = fig.add_gridspec(2, 3, width_ratios=[0.5, 0.5, 0.7])
 
     # * image plot
