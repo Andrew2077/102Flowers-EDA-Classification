@@ -1,6 +1,11 @@
 # Flowers102-Resnet50
 
-FelloshipAi project
+FelloshipAi project 
+
+might takes some time to load, due to many plots and gifs
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1M_odF1YhijOgr3FnrRSEtlDMCC7QRgQi?usp=sharing)
+
 
 ## Flowers102-Resnet50
 
