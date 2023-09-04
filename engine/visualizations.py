@@ -20,6 +20,7 @@ def create_and_display_animation(
     fps=3,
     figsize=(6, 6),
     image_size=(800, 600),
+    save = False
 ):
     # Get a list of image file paths in the specified directory
     image_files = sorted(glob.glob(os.path.join(image_dir, "*.png")))
@@ -47,7 +48,8 @@ def create_and_display_animation(
         blit=False,
         interval=1000 / fps,
     )
-    animation.save(f"{output_gif}.gif", writer="pillow", fps=fps)
+    if save:
+        animation.save(f"{output_gif}.gif", writer="pillow", fps=fps)
     # Display animation in Jupyter Notebook using to_jshtml
     display(HTML(animation.to_jshtml(default_mode="loop")))
 
