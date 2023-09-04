@@ -136,7 +136,7 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label):
     origional_img, _, overlayed_image = gradcam.adjust_cam_images(image_tensor, feat_cams[0])
 
     #* build the figure
-    fig, (ax_img, ax_cam, ax_overlay) = plt.subplots(1, 3, figsize=(12, 4))
+    fig, (ax_img, ax_cam, ax_overlay) = plt.subplots(1, 3, figsize=(8, 3))
 
     #* original image axis
     ax_img.axis("off")

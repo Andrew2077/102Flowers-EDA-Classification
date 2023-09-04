@@ -12,7 +12,7 @@
     "device": "cuda",
     "train_batch_size": 64,
     "val_batch_size": 64,
-    "epochs": 99,
+    "epochs": 30,
     "learning_rate": 0.01,
     "SHUFFLE_TRAIN": true,
     "schuffle_val": false,

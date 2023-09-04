@@ -66,7 +66,7 @@ def model_eval(model, loader, loss_fn, accuray_fn, optimizer, device):
     test_loss = total_loss / len(loader)
     test_acc = total_acc / len(loader)
 
-    print(f"Loss: {test_loss:.6f}, Acc: {total_acc/len(loader):.6f}")
+    # print(f"Loss: {test_loss:.6f}, Acc: {total_acc/len(loader):.6f}")
     return test_loss, test_acc.to("cpu").item()
 
 
