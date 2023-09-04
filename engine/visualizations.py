@@ -170,11 +170,10 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'b
         interval=1000 / 5,
     )
 
-    #* black background in anim object
     
     display(HTML(anim.to_jshtml(default_mode="loop")))
     if save:
-        anim.save(f"figs/gradcam/frames/all_feat_cam.gif", writer="pillow", fps=5)
+        anim.save(f"figs/gradcam/all_feat_cam.gif", writer="pillow", fps=5)
 
 
 def plot_sample(df, start_idx, end_idx, classes, classes_count, font_color="black", save=True):
