@@ -103,7 +103,7 @@ Ploting the first gradcam on the model's weights before training
 """
     )
     #* creating test tensor and target for gradcam
-    test_tensor = test_loader.dataset[SEED][0].to(device).unsqueeze(0)
+    test_tensor = test_loader.dataset[SEED][0].to(device)
     test_target = test_loader.dataset[SEED][1].to(device)
     #* performing gradcam on initial weights 
     if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
