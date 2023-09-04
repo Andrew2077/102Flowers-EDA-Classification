@@ -67,6 +67,20 @@ class GradCAM:
             assert False, "image_type must be pil or cv2"
         return img
 
+    def adjust_cam_images(self, image_tensor, cam):
+        # * load original image and overlay gradcam, convert BGR to RGB
+        origional_img = self.tensor_to_img(image_tensor, "cv2")
+        origional_img = cv2.cvtColor(origional_img, cv2.COLOR_BGR2RGB)
+
+        # * https://docs.opencv.org/4.x/d3/d50/group__imgproc__colormap.html
+        cam_heatmap = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)
+        cam_heatmap = cv2.cvtColor(cam_heatmap, cv2.COLOR_BGR2RGB)
+
+        # * https://docs.opencv.org/3.4/d5/dc4/tutorial_adding_images.html
+        overlayed_image = cv2.addWeighted(origional_img, 0.45, cam_heatmap, 0.55, 0)
+
+        return origional_img, cam_heatmap, overlayed_image
+
     def forward_hook(self, module, input, output):
         self.model.feature_maps = output
 
@@ -161,17 +175,10 @@ class GradCAM:
         # * generate gradcam
         # * generate cam - shape [224, 224]
         cam = self.generate_cam(image_tensor, topclass.item())
+        origional_img, cam_heatmap, overlayed_image = self.adjust_cam_images(
+            image_tensor, cam
+        )
 
-        # * load original image and overlay gradcam, convert BGR to RGB
-        origional_img = self.tensor_to_img(image_tensor, "cv2")
-        origional_img = cv2.cvtColor(origional_img, cv2.COLOR_BGR2RGB)
-
-        # * https://docs.opencv.org/4.x/d3/d50/group__imgproc__colormap.html
-        cam_heatmap = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)
-        cam_heatmap = cv2.cvtColor(cam_heatmap, cv2.COLOR_BGR2RGB)
-
-        # * https://docs.opencv.org/3.4/d5/dc4/tutorial_adding_images.html
-        overlayed_image = cv2.addWeighted(origional_img, 0.45, cam_heatmap, 0.55, 0)
         return (
             topclass.item(),
             topclass_prob.item(),

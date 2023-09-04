@@ -8,12 +8,12 @@ FelloshipAi project
 - [x] Proprocessing
   - [X] downloading dataset
   - [X] building dataset pipeline
-  - [ ] EDA
-    - [ ] bar plot for class distribution
-      - [ ] slider for classes
-    - [ ] show images for each class
-      - [ ] slider for classes
-
+  - [x] EDA
+    - [X] bar plot for class distribution
+      - [x] slider for classes
+    - [x] show images for each class
+      - [x] slider for classes
+    - [ ] write explaination for EDA in notebook
 
 - [x] Model
 - [x] Training
@@ -22,27 +22,29 @@ FelloshipAi project
     - [x] Experiment 1 : Resnet50 - Train all layers - 30 epochs
 
     <!-- * <change it> -->
-    - [x] Experiment 2 : Resnet50 - Train MLP only - 30 epochs 
+    - [x] Experiment 2 : something else ?
 
 
 - [ ] Inference module  
-  - [ ] Test loop 
-  - [ ] grad-cam 
+  - [X] Test loop 
+  - [X] grad-cam 
+  - [ ] adjust inference script
   
 - [X] XAI - GradCam from scratch
 - [ ] Visualization
-  - [ ] metrics
-    - [ ] accuracy
-    - [ ] loss
-  - [ ] confusion matrix
-    - [ ] 102 x 102 heatmap
-      - [ ] animated - 30 frames
+  - [X] metrics
+    - [X] accuracy
+    - [X] loss
+  - [ ] confusion matrix -> bad idea
   - [X] gradcam
     - [X] sanimated - 30 frames
 
+- [ ] Clean up Notebook
+- [ ] Clean up code
+- [ ] Train better model
 
 ### Advancements
 
 - [ ] Augmentation 
-- [ ] changing learning rate
+- [ ] changing learning rate - scheduler
 - [ ] TPU - Training

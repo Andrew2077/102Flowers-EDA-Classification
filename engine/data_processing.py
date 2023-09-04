@@ -18,6 +18,19 @@ transformations = transforms.Compose(
     ]
 )
 
+augmented_transforms = transforms.Compose(
+    [
+        transforms.RandomResizedCrop(256, scale=(0.8, 1.0)),
+        transforms.RandomRotation(15),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomVerticalFlip(),
+        transforms.center_crop(224),
+        transforms.ToTensor(),
+        # * ImageNet distribution params
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ]
+)
+
 
 def prepare_df(split_path: str, labels_Path: str, data_root: str) -> pd.DataFrame:
     def prepare_splits(indices: np.ndarray, value: int) -> pd.DataFrame:
@@ -59,6 +72,7 @@ def prepare_df(split_path: str, labels_Path: str, data_root: str) -> pd.DataFram
     merged["image_path"] = merged["img_id"].apply(
         lambda x: add_image_path(data_root, x)
     )
+    merged["image_path"] = merged["image_path"].apply(lambda x: x.replace("\\", "/"))
 
     train_split = merged[merged["set_type"] == 0]
     test_split = merged[merged["set_type"] == 2]

@@ -56,17 +56,17 @@ def training_loop(
 ):
     print(
         """
-    **************************************************************************************************
-    **************************************************************************************************
-    ---------------------------------   Training Started - -------------------------------------------
-    Traing model: {model_name}
-    Number of Epochs: {num_epochs}
-    Batch size: {train_loader.batch_size}
-    Device: {device}
-    **************************************************************************************************
-    **************************************************************************************************
-    Ploting the first gradcam on the model's weights before training
-    """
+**************************************************************************************************
+**************************************************************************************************
+---------------------------------   Training Started - -------------------------------------------
+Traing model: {model_name}
+Number of Epochs: {num_epochs}
+Batch size: {train_loader.batch_size}
+Device: {device}
+**************************************************************************************************
+**************************************************************************************************
+Ploting the first gradcam on the model's weights before training
+"""
     )
     if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
         os.mkdir(f"figs/gradcam/frames/{model_name}")
@@ -199,3 +199,32 @@ def training_loop(
 
     writer.close()
     return history
+
+
+def model_eval(model, loader, loss_fn, accuray_fn, optimizer, device):
+    total_loss, total_acc = 0, 0
+    for images, labels in tqdm(
+            loader,
+            total=len(loader),
+            desc=f"Evaluating model",
+            leave=True,
+            ncols=100,
+            colour="magenta",
+        ):
+        images = images.to(device)
+        labels = labels.to(device)
+        with torch.inference_mode():
+            loss_value, acc_value = training_step(
+                model=model,
+                loss_fn=loss_fn,
+                accuray_fn=accuray_fn,
+                optimizer=optimizer,
+                data_batch=images,
+                target_batch= labels,
+                device= device,
+                step_type="val"
+            )
+            total_loss += loss_value
+            total_acc += acc_value
+
+    print(f"Loss: {total_loss/len(loader):.4f}, Acc: {total_acc/len(loader):.4f}")
