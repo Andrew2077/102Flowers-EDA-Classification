@@ -12,14 +12,13 @@ def animate_plot(
     y_range_loss_range: int = None,
     delay: int = 50,
     animate: bool = False,
-    streamlit: bool = False,
     show_grid: bool = True,
     auto_size: bool = False,
     autorange: bool = False,
+    renderer:str = "colab"
 ):
     trace1_col = "train_" + plot_col
     trace2_col = "val_" + plot_col
-    print(trace1_col, trace2_col)
     
     history = pd.DataFrame((history.copy()))
 
@@ -191,7 +190,7 @@ def animate_plot(
     # fig.update_yaxes(showspikes=True, spikecolor="orange", spikethickness=2)
     # fig.update_layout(hovermode="closest")
 
-    return fig
+    fig.show(renderer=renderer)
 
 
 themes = [
