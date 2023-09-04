@@ -171,7 +171,6 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'b
     )
 
     #* black background in anim object
-    anim._repr_html_().replace('"white"', '"black"')
     
     display(HTML(anim.to_jshtml(default_mode="loop")))
     if save:
