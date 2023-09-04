@@ -20,11 +20,11 @@ class Resnet50Flower102(nn.Module):
 
         self.model.fc = nn.Sequential(
             nn.Linear(2048, 1024),
-            # nn.BatchNorm1d(1024),
+            nn.BatchNorm1d(1024),
             nn.ReLU(),
             nn.Dropout(0.5),
             nn.Linear(1024, 512),
-            # nn.BatchNorm1d(512),
+            nn.BatchNorm1d(512),
             nn.ReLU(),
             nn.Dropout(0.5),
             nn.Linear(512, 102),
