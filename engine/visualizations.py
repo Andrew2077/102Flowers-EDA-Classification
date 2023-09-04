@@ -234,17 +234,17 @@ def plot_sample(df, start_idx, end_idx, classes, classes_count, font_color="blac
     # * save the figure
     if save:
         fig.savefig(
-            f"figs/samples/sample_{start_idx}_{end_idx}.png", dpi=150, bbox_inches="tight"
+            f"figs/samples/sample_{start_idx}_{end_idx-1}.png", dpi=150, bbox_inches="tight"
         )
 
         print(
             "saved the figure with name: ",
-            f"figs/samples/frames/sample_{start_idx}_{end_idx}.png",
+            f"figs/samples/frames/sample_{start_idx}_{end_idx-1}.png",
         )
     
     else:
         plt.show()
-        
+    plt.close()
 
 
 
