@@ -70,7 +70,7 @@ def grad_cam_plot(
     matplotlib.rcParams["font.family"] = "serif"
     plt.style.use("seaborn-v0_8")
     # * create the figure
-    fig = plt.figure(figsize=(10, 5))
+    fig = plt.figure(figsize=(6, 6))
     gs = fig.add_gridspec(2, 3, width_ratios=[0.5, 0.5, 0.7])
 
     # * image plot
@@ -136,7 +136,7 @@ def plot_all_feat_cam(gradcam, image_tensor, device, true_label, font_color = 'b
     origional_img, _, overlayed_image = gradcam.adjust_cam_images(image_tensor, feat_cams[0])
 
     #* build the figure
-    fig, (ax_img, ax_cam, ax_overlay) = plt.subplots(1, 3, figsize=(8, 3))
+    fig, (ax_img, ax_cam, ax_overlay) = plt.subplots(1, 3, figsize=(6, 3))
 
     #* original image axis
     ax_img.axis("off")
