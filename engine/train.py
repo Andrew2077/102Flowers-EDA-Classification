@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import torch
 from torch.utils.tensorboard import SummaryWriter
-from tqdm.notebook import tnrange as tqdm
+from tqdm.notebook import tqdm
 import os
 
 writer = None
