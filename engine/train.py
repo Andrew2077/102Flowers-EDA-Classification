@@ -100,7 +100,6 @@ Batch size: {train_loader.batch_size}
 Device: {device}
 **************************************************************************************************
 **************************************************************************************************
-Ploting the first gradcam on the model's weights before training
 """
     )
     #* creating test tensor and target for gradcam
@@ -108,6 +107,7 @@ Ploting the first gradcam on the model's weights before training
     test_target = test_loader.dataset[SEED][1].to(device)
     #* performing gradcam on initial weights 
     if CAM_tracking:
+        print("Ploting the first gradcam on the model's weights before training")
         if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
             os.mkdir(f"figs/gradcam/frames/{model_name}")
         gradcam.save_grad_cam(
@@ -145,7 +145,7 @@ Ploting the first gradcam on the model's weights before training
             epoch_train_acc += train_acc
             
         #* scheduler step
-        scheduler.step(history["val_loss"][-1])
+        scheduler.step()
         
         #* Validation Loop
         for image_batch, label_batch in tqdm(
