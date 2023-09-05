@@ -2,14 +2,14 @@ import torch
 import random
 
 
-def load_cam_model(path, GradCAM, Resnet50Flower102, device):
+def load_cam_model(path, GradCAM, Resnet50Flower102, classes_dict, device):
     # * load the model
     if path is None:
         raise ValueError("path must be a valid path to the model")
     model = Resnet50Flower102(device)
 
     # * load gradcam, update the model with the best weights
-    gradcam = GradCAM(model, device)
+    gradcam = GradCAM(model, classes_dict)
     gradcam.model.load_state_dict(torch.load(path))
     gradcam.model.eval()
     print("model & gradcam loaded")
