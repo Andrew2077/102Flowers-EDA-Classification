@@ -143,7 +143,10 @@ Ploting the first gradcam on the model's weights before training
             )
             epoch_train_loss += train_loss
             epoch_train_acc += train_acc
-
+            
+        #* scheduler step
+        scheduler.step(history["val_loss"][-1])
+        
         #* Validation Loop
         for image_batch, label_batch in tqdm(
             val_loader,
@@ -227,7 +230,6 @@ Ploting the first gradcam on the model's weights before training
             f"Epoch {epoch+1} Test loss: {history['test_loss'][-1]:.6f} | Test acc: {(history['test_acc'][-1]*100):.4f}%"
         )
         
-        scheduler.step(history["val_loss"][-1])
         # ******************** tensorboard********************#
         # * Tensorboard scalars
         if writer is not None:

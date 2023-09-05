@@ -213,7 +213,6 @@ class GradCAM:
         # Colored Grad-Cam subplot
         axs[2].imshow(overlayed_img)
         axs[2].axis("off")
-        print(top_class)
         axs[2].set_title(
             f"Overlayed: (True = {self.class_dict[str(target_class)]}, Pred = {self.class_dict[str(top_class+1)]})"
         )
