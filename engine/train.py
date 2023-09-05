@@ -143,14 +143,9 @@ Device: {device}
             )
             epoch_train_loss += train_loss
             epoch_train_acc += train_acc
+            if scheduler is not None:
+                scheduler.step()
             
-        #* scheduler step
-        try :
-            #* for sheduler with step only
-            scheduler.step()
-        except TypeError:
-            #* for sheduler with step metric
-            scheduler.step(epoch_val_loss / len(val_loader))
             
         #* Validation Loop
         for image_batch, label_batch in tqdm(
@@ -217,10 +212,10 @@ Device: {device}
         history["val_acc"].append(epoch_val_acc.item() / len(val_loader))
         history["test_loss"].append(test_loss)
         history["test_acc"].append(test_acc)
-        try :
-            print(f"Learning rate updated to : {scheduler.get_last_lr()}")
-        except:
-            print("No scheduler")
+        # try :
+        #     print(f"Learning rate updated to : {scheduler.get_last_lr()}")
+        # except:
+        #     print("No scheduler")
         
 
         print(
