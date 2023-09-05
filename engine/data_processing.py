@@ -125,7 +125,7 @@ def prepare_splits(
 
     test_dataset = FlowerDataset(test_split, transform=transformations)
     test_loader = DataLoader(
-        val_dataset, batch_size=test_batch_size, shuffle=shuffle_test
+        test_dataset, batch_size=test_batch_size, shuffle=shuffle_test
     )
 
     return train_loader, val_loader, test_loader

@@ -19,6 +19,7 @@ def animate_plot(
 ):
     trace1_col = "train_" + plot_col
     trace2_col = "val_" + plot_col
+    trace3_col = "test_" + plot_col
     
     history = pd.DataFrame((history.copy()))
 
@@ -28,6 +29,7 @@ def animate_plot(
         y_range_max_range = y_range_loss_range
     history[trace1_col] = history[trace1_col].apply(lambda x: round(x, 4))
     history[trace2_col] = history[trace2_col].apply(lambda x: round(x, 4))
+    history[trace3_col] = history[trace3_col].apply(lambda x: round(x, 4))
 
     trace1 = go.Scatter(
         x=list(range(1, len(history) + 1)),
@@ -37,9 +39,12 @@ def animate_plot(
     trace2 = go.Scatter(
         x=list(range(1, len(history) + 1)), y=history[trace2_col], name=trace2_col
     )
+    trace3 = go.Scatter(
+        x=list(range(1, len(history) + 1)), y=history[trace3_col], name=trace3_col
+    )
     if animate:
         fig = go.Figure(
-            data=[trace1, trace2],
+            data=[trace1, trace2, trace3],
             layout=go.Layout(
                 xaxis=dict(
                     range=[1, len(history)],
@@ -99,8 +104,13 @@ def animate_plot(
                             x=list(range(len(history + 1)))[: k + 1],
                             y=history[trace2_col][: k + 1],
                         ),
+                        dict(
+                            type="scatter",
+                            x=list(range(len(history + 1)))[: k + 1],
+                            y=history[trace3_col][: k + 1],
+                        ),
                     ],
-                    traces=[0, 1],
+                    traces=[0, 1, 2],
                 )
                 for k in range(2, len(history) + 1)
             ],
@@ -108,7 +118,7 @@ def animate_plot(
 
     else:
         fig = go.Figure(
-            data=[trace1, trace2],
+            data=[trace1, trace2, trace3],
             layout=go.Layout(
                 xaxis=dict(
                     range=[1, len(history) + 1],

@@ -146,7 +146,10 @@ Device: {device}
             
         #* scheduler step
         scheduler.step()
-        
+        try :
+            print(f"Learning rate: {scheduler.get_last_lr()}")
+        except:
+            print("No scheduler")
         #* Validation Loop
         for image_batch, label_batch in tqdm(
             val_loader,
