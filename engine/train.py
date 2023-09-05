@@ -87,6 +87,7 @@ def training_loop(
     tqdm_cols=None,
     writer=writer,
     SEED=42,
+    CAM_tracking=True,
 ):
     print(
         """
@@ -106,12 +107,13 @@ Ploting the first gradcam on the model's weights before training
     test_tensor = test_loader.dataset[SEED][0].to(device).unsqueeze(0)
     test_target = test_loader.dataset[SEED][1].to(device)
     #* performing gradcam on initial weights 
-    if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
-        os.mkdir(f"figs/gradcam/frames/{model_name}")
-    gradcam.save_grad_cam(
-        test_tensor, test_target.item(), 0, f"figs/gradcam/frames/{model_name}"
-    )
-    
+    if CAM_tracking:
+        if not os.path.exists(f"figs/gradcam/frames/{model_name}"):
+            os.mkdir(f"figs/gradcam/frames/{model_name}")
+        gradcam.save_grad_cam(
+            test_tensor, test_target.item(), 0, f"figs/gradcam/frames/{model_name}"
+        )
+        
     #* History dict
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": [], "test_loss": [], "test_acc": []}
     
@@ -256,9 +258,10 @@ Ploting the first gradcam on the model's weights before training
 
         # * ******************** GradCAM ********************#
         #* saving gradcam images for visualization
-        gradcam.save_grad_cam(
-            test_tensor, test_target.item(), epoch, f"figs/gradcam/frames/{model_name}"
-        )
+        if CAM_tracking:
+            gradcam.save_grad_cam(
+                test_tensor, test_target.item(), epoch, f"figs/gradcam/frames/{model_name}"
+            )
         print(
             "---------------------------------------------------------------------------------------------------------------------"
         )

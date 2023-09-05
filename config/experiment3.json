@@ -1,6 +1,6 @@
 {
   "writer": {
-    "experiment_name": "weight_decay_",
+    "experiment_name": "Fine_tuning",
     "model_name": "improved_model",
     "extra": ""
   },
