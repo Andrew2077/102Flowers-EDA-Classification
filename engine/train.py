@@ -145,7 +145,12 @@ Device: {device}
             epoch_train_acc += train_acc
             
         #* scheduler step
-        scheduler.step()
+        try :
+            #* for sheduler with step only
+            scheduler.step()
+        except TypeError:
+            #* for sheduler with step metric
+            scheduler.step(epoch_val_loss / len(val_loader))
         #* Validation Loop
         for image_batch, label_batch in tqdm(
             val_loader,
