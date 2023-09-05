@@ -1,7 +1,7 @@
 {
   "writer": {
     "experiment_name": "Train_Resnet",
-    "model_name": "colab_model",
+    "model_name": "base_trained_model",
     "extra": ""
   },
 
