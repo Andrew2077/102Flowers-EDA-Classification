@@ -151,6 +151,7 @@ Device: {device}
         except TypeError:
             #* for sheduler with step metric
             scheduler.step(epoch_val_loss / len(val_loader))
+            
         #* Validation Loop
         for image_batch, label_batch in tqdm(
             val_loader,
