@@ -1,6 +1,6 @@
 # Flowers102-Resnet50
 
-FelloshipAi project 
+FellowshipAi project 
 
 might takes some time to load, due to many plots and gifs, please be patient
 
