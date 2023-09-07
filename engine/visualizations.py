@@ -97,7 +97,7 @@ def grad_cam_plot(
     overlayed_plot.imshow(overlayed)
     overlayed_plot.set_title(f"Pred label: {class_dict[str(top_4_classes[0])]}")
 
-    classes_names = [class_dict[str(i)] for i in top_4_classes]
+    classes_names = [f"{class_dict[str(i)]} - {i})"  for i in top_4_classes]
     bar_plot = fig.add_subplot(gs[:, 2])
     # bar_plot.barh(y = classes_names, width = top_4_probs)
     bar_plot.bar(x=classes_names, height=top_4_probs)
