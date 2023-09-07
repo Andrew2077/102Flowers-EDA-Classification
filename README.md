@@ -132,7 +132,7 @@ The Notebook has everything from downloading dataset to fine tuning the model an
 - idx 75
 - grad camp for 1 image & top 4 classes
 
-![gradcam](misc/Sample_test.png)
+![gradcam](misc/sample_test.png)
 
 - CAM for all classes
 
