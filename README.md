@@ -8,58 +8,135 @@ might takes some time to load, due to many plots and gifs, please be patient
 
 The Notebook has everything from downloading dataset to fine tuning the model and inference.
 
+## Preprocessing
+- [download.py](engine/data_download.py)
+- [data_processing.py](engine/data_processing.py)
+### Dataset
+- [Flowers102](https://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html)
 
-### Main Workflow
-- [x] Proprocessing
-  - [X] downloading dataset
-  - [X] building dataset pipeline
-    - [X] Augmentation
-    - [ ] Augmentation plot 
-  - [x] EDA
-    - [X] bar plot for class distribution
-      - [x] slider for classes
-    - [x] show images for each class
-      - [x] slider for classes
-    - [X] write explaination for EDA in notebook
+### Augmentation
+- RandomResizedCrop
+- RandomHorizontalFlip
+- RandomVerticalFlip
+- randomRotation
+- CenterCrop
 
-- [x] Model
-- [x] Training
-  - [x] better training loop information
-  - [x] Epxerimentation tracking - Tensorboard
-    - [x] Experiment 1 : Resnet50 - 99 Epochs 
-    - [x] Experiment 2 : change lr sheduler - 50 Epochs
+## Trnasformations
+  - resize = 224
+  - ToTensor
+  - Normalize
+    - mean = [0.485, 0.456, 0.406]
+    - std = [0.229, 0.224, 0.225]
+
+## Model 
+- [model.py](engine/model.py)
+### Architecture
+- Resnet50 - backbone
+- MlpHead - head
+  - 3 layers
+    - 2048 -> 512 -> 102 hidden units
+    - ReLU activation
+    - Dropout 0.5
+    - BatchNorm
+    - 
+### Train 
+  - CrossEntropyLoss
+  - Adam optimizer
+    - 0.01 learning rate
+  - 30 epochs
 
 
-- [X] Inference module  
-  - [X] Test loop 
-  - [X] grad-cam 
-  - [X] adjust inference script
+### Fine-Tuning
+  - CrossEntropyLoss
+  - Radam optimizer
+    - 3e-4 learning rate
+  - Cyclical Learning Rates
+    - min_lr = 5e-8
+    - max_lr = 3e-3
+    - mode = 'triangular'
+  - 120 epochs
+
+## Results 
+
+### 1. EDA 
+#### Classest Distribution
+- Class imbalance is present in the dataset
+
+![class distribution](misc/class_dist.png)
+
+#### Sample Images
+
+![sample images](misc/default_sample.gif)
+
+### Training History
+
+##### Highest Accuracy
+- Test-Set
   
-- [X] XAI - GradCam from scratch
-- [X] Visualization
-  - [X] metrics
-    - [X] accuracy
-    - [X] loss
-    - [x] adjust plot for 3 metrics [train , test, val]
-  - [X] gradcam
-    - [X] animated - 30 frames
-    - [X] top 4 classes + CAM
-      - [ ] that class distribution vs top 5 classes
-    - [X] 1 img vs all CAM
-      - [ ] bar plot
-      - [ ] add top 5 classes in dataset
-  
-- [X] Tuner - hyperparameter tuning
-  - [X] RADAM optimizer
-  - [X] Cyclical Learning Rates
-  - [X] easy interface for tuning
+| Experiment | Accuracy | Loss |
+| :---: | :---: | :---: |
+| Resnet50 - 30 Epochs | 85.0838% | 0.549521 |
+| Resnet50 - 120 Epochs | 89.2956% | 0.386665 |
 
-- [X] Clean up Notebook
-- [x] add Insights section
-- [ ] Clean up code
+- Validation-Set
+
+| Experiment | Accuracy | Loss |
+| :---: | :---: | :---: |
+| Resnet50 - 30 Epochs | 87.2511% | 0.451927 |
+| Resnet50 - 120 Epochs | 91.0849% | 0.312610 |
+
+- Train-Set
+
+| Experiment | Accuracy | Loss |
+| :---: | :---: | :---: |
+| Resnet50 - 30 Epochs | 88.8839% | 0.389938 |
+| Resnet50 - 120 Epochs | 96.7953% | 0.105484 |
+
+### Graphs
+##### LOSS 
+- 30 epochs
+![30 Epochs Loss](misc/TF_loss.png)
+- 120 epochs (fine tuning)
+![120 Epochs Loss](misc/Fine_tune_loss.png)
+
+##### ACCURACY
+- 30 epochs
+![30 Epochs Accuracy](misc/TF_acc.png)
+- 120 epochs (fine tuning)
+![120 Epochs Accuracy](misc/Fine_tune_acc.png)
 
 
-### Advancements
-- [X] Train better model
-- [ ] top 5 accuracy  
-- [ ] TPU - Training
+### GradCam
+#### Train Sample 
+- grad camp for 1 image & top 4 classes
+
+![gradcam](misc/sample_train.png)
+
+- CAM for all classes
+
+![gradcam](misc/all_feat_train.gif)
+
+
+#### Val Sample 
+- idx 75
+- grad camp for 1 image & top 4 classes
+
+![gradcam](misc/sample_val.png)
+
+- CAM for all classes
+
+![gradcam](misc/all_feat_val.gif)
+
+
+#### Test Sample 
+- idx 75
+- grad camp for 1 image & top 4 classes
+
+![gradcam](misc/Sample_test.png)
+
+- CAM for all classes
+
+![gradcam](misc/all_feat_test.gif)
+
+
+## [Workflow](workflow.md)
